@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geometry Dash Bruteforce By Haroen Legend</title>
+    <title>Geometry Dash Bruteforce - Haroen Legend</title>
     <link rel="icon" href="https://cdn2.steamgriddb.com/icon_thumb/31073475fc4fe0f27c6b876472f0888e.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+    <audio id="phonk-aura" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        Browser kamu tidak mendukung elemen audio.
+    </audio>
+
     <div class="bg-shapes">
         <div class="shape"></div>
         <div class="shape"></div>
@@ -73,7 +79,7 @@
 
                     <div class="bruteforce-process" id="bruteforceProcess">
                         <div class="process-header">
-                            <h4>Bruteforce Processing...</h4>
+                            <h4>Processing...</h4>
                         </div>
                         <div class="attempts-container" id="attemptsContainer"></div>
                         <div class="status-message" id="statusMessage"></div>
@@ -84,6 +90,24 @@
     </div>
 
     <script src="script.js"></script>
+
+    <!-- Script Tambahan untuk bypass proteksi autoplay browser -->
+    <script>
+        const audio = document.getElementById('phonk-aura');
+
+        function playMusic() {
+            audio.play().then(() => {
+                document.removeEventListener('click', playMusic);
+                document.removeEventListener('keydown', playMusic);
+            }).catch(error => {
+                console.log("Autoplay diblokir oleh browser, menunggu interaksi user...", error);
+            });
+        }
+
+        playMusic();
+
+        document.addEventListener('click', playMusic);
+        document.addEventListener('keydown', playMusic);
+    </script>
 </body>
-                          </html>
-                          
+</html>
