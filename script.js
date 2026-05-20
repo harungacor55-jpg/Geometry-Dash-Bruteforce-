@@ -370,4 +370,3 @@ async function startBruteforce(targetUsername) {
         ⏳ Advanced encryption detected.<br>Strong cryptographic implementation confirmed.
     `;
 }
-  
