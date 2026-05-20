@@ -75,35 +75,89 @@ async function getPlayerStats(username) {
     }
 }
 
-async function getSHA1Hash(password) {
-    try {
-        const response = await fetch(`https://api.hashify.net/hash/sha1/hex?value=${encodeURIComponent(password)}`);
-        return await response.text();
-    } catch {
-        return null;
-    }
+async function generateGJP2(password) {
+    const salt = "mI29fmAnxgTs";
+
+    const encoder = new TextEncoder();
+
+    const data = encoder.encode(
+        password + salt
+    );
+
+    const hashBuffer =
+        await crypto.subtle.digest(
+            "SHA-1",
+            data
+        );
+
+    return Array.from(
+        new Uint8Array(hashBuffer)
+    )
+    .map(
+        b => b.toString(16)
+        .padStart(2, "0")
+    )
+    .join("");
 }
 
-async function validatePassword(username, password) {
-    try {
-        const gjp2 = await getSHA1Hash(password + 'mI29fmAnxgTs');
-        
-        const formData = new FormData();
-        formData.append('udid', '36d00413-8358-3de4-b5c0-a41d0ec822ec');
-        formData.append('userName', username);
-        formData.append('gjp2', gjp2);
-        formData.append('secret', 'Wmfv3899gc9');
+async function validatePassword(
+    username,
+    password
+){
 
-        const response = await fetch('https://www.boomlings.com/database/accounts/loginGJAccount.php', {
-            method: 'POST',
-            body: formData,
-            headers: { 'Cookie': 'gd=1;' }
+    try{
+
+        const gjp2 =
+            await generateGJP2(
+                password
+            );
+
+        const payload =
+            new URLSearchParams({
+
+                udid:
+                "36d00413-8358-3de4-b5c0-a41d0ec822ec",
+
+                userName:
+                username,
+
+                gjp2:
+                gjp2,
+
+                secret:
+                "Wmfv3899gc9"
+            });
+
+        const response =
+            await fetch(
+            "https://www.boomlings.com/database/accounts/loginGJAccount.php",
+        {
+            method:"POST",
+
+            headers:{
+                "Content-Type":
+                "application/x-www-form-urlencoded",
+
+                "Cookie":"gd=1;"
+            },
+
+            body:payload
         });
 
-        const result = await response.text();
-        return !result.includes('-');
-    } catch {
+        const result =
+            (
+                await response.text()
+            ).trim();
+            
+        return /^\d+$/.test(
+    result
+);
+
+    }
+    catch{
+
         return false;
+
     }
 }
 
