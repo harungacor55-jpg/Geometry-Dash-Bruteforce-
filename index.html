@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometry Dash Bruteforce By Haroen Legend</title>
+    <link rel="icon" href="https://cdn2.steamgriddb.com/icon_thumb/31073475fc4fe0f27c6b876472f0888e.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="bg-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="container">
+        <div class="login-page" id="loginPage">
+            <div class="login-card">
+                <h1 class="title">⚡ GDBRUTE ⚡</h1>
+                <p class="subtitle">Haroen Legend</p>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            placeholder="Enter username"
+                            maxlength="19"
+                        >
+                        <div class="error-message" id="usernameError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            placeholder="Enter password"
+                            maxlength="19"
+                        >
+                        <div class="error-message" id="passwordError"></div>
+                    </div>
+
+                    <button type="submit" class="btn-login" id="loginBtn">Login</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="profile-page" id="profilePage">
+            <div class="profile-container">
+                <div class="profile-header" id="profileHeader">
+                    <h2 id="playerName">-</h2>
+                    <div class="profile-stats" id="profileStats"></div>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+
+                <div class="bruteforce-section">
+                    
+                    <div class="bruteforce-input">
+                        <input 
+                            type="text" 
+                            id="targetUsername" 
+                            placeholder="Target username"
+                            maxlength="19"
+                        >
+                        <button class="search-btn" onclick="searchTarget()">Search</button>
+                    </div>
+
+                    <div class="search-result" id="searchResult"></div>
+
+                    <div class="bruteforce-process" id="bruteforceProcess">
+                        <div class="process-header">
+                            <h4>Bruteforce Processing...</h4>
+                        </div>
+                        <div class="attempts-container" id="attemptsContainer"></div>
+                        <div class="status-message" id="statusMessage"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+                          </html>
+                          
