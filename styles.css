@@ -6,14 +6,18 @@
 
 body {
     font-family: 'Orbitron', sans-serif;
-    background: linear-gradient(135deg, #0a0e27 0%, #1a1547 50%, #0f0a2e 100%);
+    /* Tema Hacker: Dominan hitam keabuan gelap dengan nuansa kode */
+    background: linear-gradient(135deg, #05080c 0%, #0a1118 50%, #020406 100%);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #fff;
-    overflow: hidden;
+    color: #cbd5e1;
     position: relative;
+    /* FIX SCROLL: Izinkan scroll secara global jika konten melebihi layar */
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 20px 10px;
 }
 
 .bg-shapes {
@@ -27,51 +31,50 @@ body {
     pointer-events: none;
 }
 
+/* Bentuk background diubah menjadi kotak digital ala Matrix/Cyber */
 .shape {
     position: absolute;
-    opacity: 0.1;
-    animation: float 20s infinite;
+    opacity: 0.03;
+    animation: float 25s infinite linear;
 }
 
 .shape:nth-child(1) {
-    width: 200px;
-    height: 200px;
-    background: #ff006e;
-    border-radius: 50%;
-    top: -50px;
-    left: -50px;
+    width: 150px;
+    height: 150px;
+    background: #00ff66;
+    top: 10%;
+    left: 5%;
 }
 
 .shape:nth-child(2) {
-    width: 300px;
-    height: 300px;
-    background: #00d9ff;
-    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-    top: 50%;
-    right: -100px;
-    animation-delay: 5s;
+    width: 250px;
+    height: 250px;
+    background: #00ff66;
+    top: 60%;
+    right: -50px;
+    animation-delay: 4s;
 }
 
 .shape:nth-child(3) {
-    width: 250px;
-    height: 250px;
-    background: #ffbe0b;
-    clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 50% 100%);
-    bottom: -50px;
-    left: 50%;
-    animation-delay: 10s;
+    width: 180px;
+    height: 180px;
+    background: #00ffbb;
+    bottom: 10%;
+    left: 40%;
+    animation-delay: 8s;
 }
 
 @keyframes float {
     0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-30px) rotate(180deg); }
+    50% { transform: translateY(-40px) rotate(90deg); }
 }
 
 .container {
     position: relative;
     z-index: 10;
     width: 100%;
-    height: 100%;
+    max-width: 800px;
+    /* FIX SCROLL: Hapus height 100% agar container bisa memanjang alami mengikuti konten */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -81,7 +84,6 @@ body {
 .login-page {
     display: flex;
     width: 100%;
-    height: 100%;
     justify-content: center;
     align-items: center;
     opacity: 1;
@@ -95,21 +97,22 @@ body {
 }
 
 .login-card {
-    background: rgba(10, 14, 39, 0.8);
-    backdrop-filter: blur(10px);
-    border: 3px solid #ff006e;
-    padding: 60px;
-    border-radius: 20px;
-    max-width: 500px;
-    width: 90%;
-    box-shadow: 0 0 40px rgba(255, 0, 110, 0.4), inset 0 0 20px rgba(0, 217, 255, 0.1);
-    animation: slideInScale 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: rgba(10, 16, 26, 0.95);
+    backdrop-filter: blur(12px);
+    /* Border hijau khas hacker terminal */
+    border: 2px solid #00ff66;
+    padding: 40px 30px;
+    border-radius: 8px;
+    max-width: 450px;
+    width: 100%;
+    box-shadow: 0 0 30px rgba(0, 255, 102, 0.2), inset 0 0 15px rgba(0, 255, 102, 0.05);
+    animation: slideInScale 0.5s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 @keyframes slideInScale {
     0% {
         opacity: 0;
-        transform: scale(0.8) translateY(30px);
+        transform: scale(0.95) translateY(20px);
     }
     100% {
         opacity: 1;
@@ -120,41 +123,50 @@ body {
 .title {
     font-family: 'Press Start 2P', cursive;
     text-align: center;
-    font-size: 28px;
-    color: #ff006e;
-    margin-bottom: 15px;
-    text-shadow: 0 0 20px rgba(255, 0, 110, 0.8), 0 0 40px rgba(0, 217, 255, 0.5);
-    letter-spacing: 2px;
+    font-size: 24px;
+    color: #00ff66;
+    margin-bottom: 10px;
+    text-shadow: 0 0 15px rgba(0, 255, 102, 0.6);
+    letter-spacing: 1px;
     animation: titleGlow 2s ease-in-out infinite;
 }
 
 @keyframes titleGlow {
-    0%, 100% {
-        text-shadow: 0 0 20px rgba(255, 0, 110, 0.8), 0 0 40px rgba(0, 217, 255, 0.5);
-    }
-    50% {
-        text-shadow: 0 0 30px rgba(255, 0, 110, 1), 0 0 60px rgba(0, 217, 255, 0.8);
-    }
+    0%, 100% { text-shadow: 0 0 15px rgba(0, 255, 102, 0.6); }
+    50% { text-shadow: 0 0 25px rgba(0, 255, 102, 0.9), 0 0 40px rgba(0, 255, 102, 0.4); }
 }
 
 .subtitle {
     text-align: center;
-    font-size: 12px;
-    color: #00d9ff;
-    margin-bottom: 40px;
-    letter-spacing: 1px;
+    font-size: 11px;
+    color: #00ffbb;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
     text-transform: uppercase;
 }
 
-.form-group {
+/* Modifikasi kotak teks deskripsi tambahan */
+.tool-description, .tool-info-box {
+    background: rgba(0, 0, 0, 0.5);
+    border-left: 3px solid #00ff66;
+    padding: 12px;
+    font-family: monospace;
+    color: #84cc16;
     margin-bottom: 25px;
+    font-size: 11px;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 20px;
 }
 
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    font-size: 14px;
-    color: #00d9ff;
+    font-size: 12px;
+    color: #00ffbb;
     text-transform: uppercase;
     letter-spacing: 1px;
     font-weight: bold;
@@ -162,39 +174,33 @@ body {
 
 .form-group input {
     width: 100%;
-    padding: 15px;
-    background: rgba(255, 0, 110, 0.1);
-    border: 2px solid #00d9ff;
-    border-radius: 8px;
-    color: #fff;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 16px;
-    transition: all 0.3s ease;
+    padding: 14px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid #334155;
+    border-radius: 4px;
+    color: #00ff66;
+    font-family: 'Courier New', monospace;
+    font-size: 15px;
+    transition: all 0.2s ease;
 }
 
 .form-group input:focus {
     outline: none;
-    border-color: #ff006e;
-    box-shadow: 0 0 20px rgba(255, 0, 110, 0.5), inset 0 0 10px rgba(0, 217, 255, 0.2);
-    background: rgba(255, 0, 110, 0.2);
+    border-color: #00ff66;
+    box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
+    background: rgba(0, 255, 102, 0.02);
 }
 
 .form-group input::placeholder {
-    color: rgba(0, 217, 255, 0.5);
+    color: #475569;
 }
 
 .error-message {
-    color: #ff006e;
-    font-size: 12px;
-    margin-top: 5px;
+    color: #ef4444;
+    font-size: 11px;
+    margin-top: 6px;
+    font-family: monospace;
     display: none;
-    animation: shake 0.5s ease;
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-10px); }
-    75% { transform: translateX(10px); }
 }
 
 .error-message.show {
@@ -203,41 +209,40 @@ body {
 
 .btn-login {
     width: 100%;
-    padding: 15px;
-    background: linear-gradient(135deg, #ff006e 0%, #c2185b 100%);
+    padding: 14px;
+    background: #00ff66;
     border: none;
-    border-radius: 8px;
-    color: #fff;
+    border-radius: 4px;
+    color: #05080c;
     font-family: 'Press Start 2P', cursive;
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 20px rgba(255, 0, 110, 0.5);
+    font-weight: bold;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
 }
 
 .btn-login:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 0 30px rgba(255, 0, 110, 0.8), 0 0 50px rgba(0, 217, 255, 0.5);
+    background: #00cc52;
+    box-shadow: 0 0 25px rgba(0, 255, 102, 0.5);
 }
 
 .btn-login:disabled {
-    opacity: 0.7;
+    opacity: 0.4;
     cursor: not-allowed;
 }
 
 .profile-page {
     display: none;
     width: 100%;
-    height: 100%;
-    overflow-y: auto;
-    padding: 40px 20px;
+    /* FIX SCROLL: Biarkan tinggi otomatis mengikuti isi agar tidak macet di HP */
+    height: auto;
 }
 
 .profile-page.show {
     display: block;
-    animation: fadeIn 0.5s ease;
+    animation: fadeIn 0.4s ease;
 }
 
 @keyframes fadeIn {
@@ -246,89 +251,87 @@ body {
 }
 
 .profile-container {
-    max-width: 800px;
+    width: 100%;
+    max-width: 750px;
     margin: 0 auto;
 }
 
 .profile-header {
-    background: rgba(10, 14, 39, 0.8);
-    border: 3px solid #00d9ff;
-    padding: 40px;
-    border-radius: 15px;
-    margin-bottom: 30px;
-    box-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
-    animation: slideInScale 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: rgba(10, 16, 26, 0.95);
+    border: 1px solid #00ffbb;
+    padding: 30px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 20px rgba(0, 255, 187, 0.1);
 }
 
 .profile-header h2 {
     font-family: 'Press Start 2P', cursive;
-    color: #00d9ff;
+    color: #00ffbb;
     margin-bottom: 20px;
-    font-size: 24px;
+    font-size: 18px;
 }
 
 .profile-stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-    margin-bottom: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin-bottom: 15px;
 }
 
 .stat-box {
-    background: rgba(255, 0, 110, 0.1);
-    border: 2px solid #ff006e;
-    padding: 15px;
-    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #334155;
+    padding: 12px;
+    border-radius: 4px;
     text-align: center;
 }
 
 .stat-box .label {
-    color: #00d9ff;
-    font-size: 11px;
+    color: #94a3b8;
+    font-size: 10px;
     text-transform: uppercase;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .stat-box .value {
-    color: #ffbe0b;
-    font-size: 22px;
+    color: #00ff66;
+    font-size: 18px;
     font-weight: bold;
+    font-family: monospace;
 }
 
 .logout-btn {
-    padding: 10px 20px;
-    background: linear-gradient(135deg, #00d9ff 0%, #0099cc 100%);
-    border: none;
-    border-radius: 6px;
-    color: #000;
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid #ef4444;
+    border-radius: 4px;
+    color: #ef4444;
     font-family: 'Orbitron', sans-serif;
-    font-size: 12px;
+    font-size: 11px;
     cursor: pointer;
     text-transform: uppercase;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    margin-top: 20px;
+    transition: all 0.2s ease;
 }
 
 .logout-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(0, 217, 255, 0.6);
+    background: rgba(239, 68, 68, 0.1);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
 }
 
 .bruteforce-section {
-    background: rgba(10, 14, 39, 0.8);
-    border: 3px solid #ffbe0b;
-    padding: 40px;
-    border-radius: 15px;
-    margin-bottom: 30px;
-    box-shadow: 0 0 30px rgba(255, 190, 11, 0.3);
+    background: rgba(10, 16, 26, 0.95);
+    border: 1px solid #00ff66;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 255, 102, 0.1);
 }
 
 .bruteforce-section h3 {
-    color: #ffbe0b;
+    color: #00ff66;
     font-family: 'Press Start 2P', cursive;
-    margin-bottom: 25px;
-    font-size: 18px;
+    margin-bottom: 20px;
+    font-size: 14px;
 }
 
 .bruteforce-input {
@@ -340,123 +343,118 @@ body {
 .bruteforce-input input {
     flex: 1;
     padding: 12px;
-    background: rgba(255, 190, 11, 0.1);
-    border: 2px solid #ffbe0b;
-    border-radius: 6px;
-    color: #fff;
-    font-family: 'Orbitron', sans-serif;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #334155;
+    border-radius: 4px;
+    color: #00ff66;
+    font-family: monospace;
     font-size: 14px;
 }
 
 .bruteforce-input input:focus {
     outline: none;
-    border-color: #ff006e;
+    border-color: #00ff66;
 }
 
 .search-btn, .start-bruteforce-btn {
-    padding: 12px 25px;
-    background: linear-gradient(135deg, #ffbe0b 0%, #ffb700 100%);
+    padding: 12px 20px;
+    background: #00ff66;
     border: none;
-    border-radius: 6px;
-    color: #000;
+    border-radius: 4px;
+    color: #05080c;
     font-family: 'Orbitron', sans-serif;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     text-transform: uppercase;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .search-btn:hover, .start-bruteforce-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(255, 190, 11, 0.6);
+    background: #00cc52;
 }
 
 .search-result {
     display: none;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .search-result.show {
     display: block;
-    animation: slideInScale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .user-found {
-    background: rgba(0, 217, 255, 0.1);
-    border: 2px solid #00d9ff;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    text-align: center;
+    background: rgba(0, 255, 102, 0.05);
+    border: 1px solid #00ff66;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-family: monospace;
+    font-size: 13px;
 }
 
 .user-not-found {
-    background: rgba(255, 0, 110, 0.1);
-    border: 2px solid #ff006e;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    text-align: center;
-    color: #ff006e;
+    background: rgba(239, 68, 68, 0.05);
+    border: 1px solid #ef4444;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    color: #ef4444;
+    font-family: monospace;
+    font-size: 13px;
 }
 
 .charset-options {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-    margin-bottom: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+    margin-bottom: 15px;
 }
 
 .charset-checkbox {
     display: flex;
     align-items: center;
-    background: rgba(255, 0, 110, 0.1);
-    padding: 15px;
-    border: 2px solid #00d9ff;
-    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 12px;
+    border: 1px solid #334155;
+    border-radius: 4px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .charset-checkbox:hover {
-    background: rgba(255, 0, 110, 0.2);
-    border-color: #ff006e;
+    border-color: #00ff66;
 }
 
 .charset-checkbox input {
-    margin-right: 10px;
-    cursor: pointer;
-    width: 18px;
-    height: 18px;
-    accent-color: #ff006e;
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
+    accent-color: #00ff66;
 }
 
 .charset-checkbox label {
     cursor: pointer;
-    color: #00d9ff;
-    font-size: 12px;
+    color: #94a3b8;
+    font-size: 11px;
     text-transform: uppercase;
-    flex: 1;
 }
 
 .start-bruteforce-btn {
     width: 100%;
-    padding: 15px;
-    background: linear-gradient(135deg, #ff006e 0%, #c2185b 100%);
-    color: #fff;
+    padding: 14px;
     font-family: 'Press Start 2P', cursive;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .start-bruteforce-btn:disabled {
-    opacity: 0.5;
+    opacity: 0.3;
     cursor: not-allowed;
 }
 
 .bruteforce-process {
     display: none;
-    margin-top: 30px;
+    margin-top: 25px;
 }
 
 .bruteforce-process.show {
@@ -464,118 +462,121 @@ body {
 }
 
 .process-header {
-    background: rgba(255, 0, 110, 0.1);
-    border: 2px solid #ff006e;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    text-align: center;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #334155;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
 }
 
 .process-header h4 {
-    color: #ffbe0b;
-    margin-bottom: 10px;
-    font-size: 14px;
-}
-
-.process-header p {
-    color: #00d9ff;
+    color: #00ffbb;
+    margin-bottom: 5px;
     font-size: 12px;
 }
 
+.process-header p {
+    color: #94a3b8;
+    font-size: 11px;
+}
+
 .attempts-container {
-    background: rgba(10, 14, 39, 0.6);
-    border: 2px solid #00d9ff;
-    padding: 20px;
-    border-radius: 8px;
-    max-height: 400px;
+    background: #020406;
+    border: 1px solid #334155;
+    padding: 15px;
+    border-radius: 4px;
+    max-height: 250px;
     overflow-y: auto;
 }
 
 .attempt {
-    background: rgba(255, 0, 110, 0.1);
-    border-left: 3px solid #ff006e;
-    padding: 12px;
-    margin-bottom: 10px;
-    border-radius: 4px;
-    font-size: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border-left: 2px solid #64748b;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    font-size: 11px;
     font-family: 'Courier New', monospace;
-    color: #00d9ff;
-    animation: slideInRight 0.3s ease;
-}
-
-@keyframes slideInRight {
-    0% {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(0);
-    }
+    color: #94a3b8;
 }
 
 .attempt.success {
-    background: rgba(0, 217, 255, 0.2);
-    border-left-color: #00d9ff;
-    color: #ffbe0b;
+    background: rgba(0, 255, 102, 0.1);
+    border-left-color: #00ff66;
+    color: #00ff66;
     font-weight: bold;
 }
 
 .status-message {
     text-align: center;
-    color: #ffbe0b;
-    margin-top: 20px;
-    font-size: 14px;
-    font-weight: bold;
+    color: #00ffbb;
+    margin-top: 15px;
+    font-size: 12px;
 }
 
 .loading-spinner {
     display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(255, 190, 11, 0.3);
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(0, 255, 102, 0.2);
     border-radius: 50%;
-    border-top-color: #ffbe0b;
-    animation: spin 1s linear infinite;
+    border-top-color: #00ff66;
+    animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
 
+/* Kustomisasi Scrollbar global */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    background: rgba(0, 217, 255, 0.1);
+    background: #020406;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #ff006e;
-    border-radius: 4px;
+    background: #1e293b;
+    border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #ffbe0b;
+    background: #00ff66;
 }
 
+/* RESPONSIVE BREAKPOINTS (FIX ALL DEVICES) */
 @media (max-width: 600px) {
+    body {
+        align-items: flex-start; /* Mengurangi pemotongan margin atas di layar pendek */
+        padding: 15px 10px;
+    }
+
     .login-card {
-        padding: 40px 30px;
+        padding: 30px 20px;
     }
 
     .title {
-        font-size: 20px;
+        font-size: 18px;
+    }
+
+    .profile-header, .bruteforce-section {
+        padding: 20px 15px;
+    }
+
+    .profile-header h2 {
+        font-size: 14px;
     }
 
     .profile-stats {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr); /* Tetap rapi 2 kolom di layar HP kecil */
     }
 
-    .charset-options {
-        grid-template-columns: 1fr;
+    .bruteforce-input {
+        flex-direction: column; /* Membuat input dan tombol bertumpuk vertikal di HP */
     }
-  }
-  
+
+    .search-btn {
+        width: 100%;
+    }
+}
