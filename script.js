@@ -434,7 +434,7 @@ async function startGeneration() {
         // Auto-scroll ke bawah
         attemptsContainer.scrollTop = attemptsContainer.scrollHeight;
 
-        // Delay 50ms supaya browser tidak berat
-        await new Promise(resolve => setTimeout(resolve, 50));
+        // Delay 150ms supaya browser tidak berat
+        await new Promise(resolve => setTimeout(resolve, 150));
     }
 }
