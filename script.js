@@ -253,7 +253,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     }
 
     loginBtn.disabled = true;
-    loginBtn.textContent = 'Wait...';
+    loginBtn.textContent = 'Wait';
 
     const usernameError = document.getElementById('usernameError');
     const ip = await getClientIp();
@@ -320,7 +320,7 @@ async function showProfile(username) {
     const stats = await getPlayerStats(username);
     
     if (stats && !stats.error) {
-        document.getElementById('playerName').textContent = 'Welcome, ' + stats.username + ' ×͜×';
+        document.getElementById('playerName').textContent = 'Welcome, ' + stats.username + '🤡';
         
         const profileStats = document.getElementById('profileStats');
         profileStats.innerHTML = `
