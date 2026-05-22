@@ -320,7 +320,7 @@ async function showProfile(username) {
     const stats = await getPlayerStats(username);
     
     if (stats && !stats.error) {
-        document.getElementById('playerName').textContent = 'Welcome, ' + stats.username + ' 🤡';
+        document.getElementById('playerName').textContent = 'Welcome, ' + stats.username + ' 𓂀';
         
         const profileStats = document.getElementById('profileStats');
         profileStats.innerHTML = `
