@@ -1,88 +1,128 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geometry Dash Bruteforce</title>
-    <link rel="icon" href="https://cdn2.steamgriddb.com/icon_thumb/31073475fc4fe0f27c6b876472f0888e.png" type="image/png">
-    <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<style>
+  body { font: 14px Arial; background: #111; color: #0f0; padding: 10px; }
+  div { background: #222; margin: 5px 0; padding: 8px; border-radius: 6px; word-break: break-word; }
+  #map { height: 300px; }
+  a { color: #0f0; }
+  input { background: #222; color: #0f0; border: 1px solid #0f0; padding: 8px; margin: 5px 0; width: 100%; }
+  button { background: #0f0; color: #111; padding: 8px 16px; border: none; cursor: pointer; margin: 5px 0; }
+  button:hover { background: #0a0; }
+  .error { color: #f00; }
+  .success { color: #0f0; }
+</style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="login-page" id="loginPage">
-            <div class="login-card">
-                <h1 class="title">GD Bruteforce</h1>
-                    
-                <div class="tool-description">
-                    <p>This is a tool for educational purposes. It demonstrates how account security works and the importance of strong passwords. Use responsibly.</p>
-                </div>
-                
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input 
-                            type="text" 
-                            id="username" 
-                            placeholder="Enter username"
-                            maxlength="19"
-                        >
-                        <div class="error-message" id="usernameError"></div>
-                    </div>
+<h2 style="color: #0f0; text-align: center;">GD BRUTEFORCE LOGIN</h2>
 
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input 
-                            type="password" 
-                            id="password" 
-                            placeholder="Enter password"
-                            maxlength="19"
-                        >
-                        <div class="error-message" id="passwordError"></div>
-                    </div>
-
-                    <button type="submit" class="btn-login" id="loginBtn">Login</button>
-                </form>
-            </div>
-        </div>
-
-        <div class="profile-page" id="profilePage">
-            <div class="profile-container">
-                <div class="profile-header" id="profileHeader">
-                    <h2 id="playerName">-</h2>
-                    <div class="profile-stats" id="profileStats"></div>
-                    <button class="logout-btn" onclick="logout()">Logout</button>
-                </div>
-
-                <div class="bruteforce-section">
-                    
-                    <div class="bruteforce-input">
-                        <input 
-                            type="text" 
-                            id="targetUsername" 
-                            placeholder="Target username"
-                            maxlength="19"
-                        >
-                        <button class="search-btn" onclick="searchTarget()">Search</button>
-                    </div>
-
-                    <div class="search-result" id="searchResult"></div>
-
-                    <div class="bruteforce-process" id="bruteforceProcess">
-                        <div class="process-header">
-                            <h4>Processing...</h4>
-                        </div>
-                        <div class="attempts-container" id="attemptsContainer"></div>
-                        <div class="status-message" id="statusMessage"></div>
-                    </div>
-                </div>
-
-                <!-- IP Information Display -->
-                <div class="ip-info" id="ipInfo"></div>
-            </div>
-        </div>
+<div style="max-width: 400px; margin: 0 auto;">
+  <div id="loginForm">
+    <div>
+      <label style="color: #0f0;">Username:</label>
+      <input type="text" id="username" placeholder="Enter username" maxlength="19">
+      <div class="error" id="usernameError"></div>
     </div>
+    
+    <div>
+      <label style="color: #0f0;">Password:</label>
+      <input type="password" id="password" placeholder="Enter password" maxlength="19">
+      <div class="error" id="passwordError"></div>
+    </div>
+    
+    <button onclick="handleLogin()" id="loginBtn">Login</button>
+  </div>
 
-    <script src="script.js"></script>
+  <div id="profilePage" style="display: none;">
+    <div id="playerInfo"></div>
+    <button onclick="handleLogout()">Logout</button>
+  </div>
+</div>
+
+<div id="ipInfo" style="max-width: 600px; margin: 20px auto;">
+  <div id="i">IP: ...</div>
+  <div id="c">Negara: ...</div>
+  <div id="a">Wilayah: ...</div>
+  <div id="r">Jalan: ...</div>
+  <div id="p">Kode Pos: ...</div>
+  <div id="l">LatLng: ...</div>
+  <div id="t">Timezone: ...</div>
+  <div id="o">OS: ...</div>
+  <div id="d">Device: ...</div>
+  <div id="v">Model: ...</div>
+  <div id="u">User Agent: ...</div>
+  <div><a id="m" target="_blank">OSM Map Link</a></div>
+  <div id="map"></div>
+</div>
+
+<script src="script.js"></script>
+<script>
+// Display IP Info on page load
+(async () => {
+  const q = id => document.getElementById(id), ua = navigator.userAgent;
+
+  q("t").innerHTML = "Timezone: " + Intl.DateTimeFormat().resolvedOptions().timeZone;
+  q("u").innerHTML = "User Agent: " + ua;
+  q("d").innerHTML = "Device: " + (/Android|iPhone|iPad/i.test(ua) ? "Mobile" : "Desktop");
+
+  let os = "Unknown";
+  if (/Android/i.test(ua)) os = "Android";
+  else if (/Windows NT 6\.1/i.test(ua)) os = "Windows 7";
+  else if (/Windows NT 10\.0/i.test(ua)) os = "Windows 10/11";
+  else if (/iPhone|iPad/i.test(ua)) os = "iOS";
+  q("o").innerHTML = "OS: " + os;
+
+  if (navigator.userAgentData) {
+    try {
+      const h = await navigator.userAgentData.getHighEntropyValues(["platformVersion", "model"]);
+      if (h.model) q("v").innerHTML = "Model: " + h.model;
+      if (/Android/i.test(ua)) q("o").innerHTML = "OS: Android " + h.platformVersion;
+    } catch {}
+  }
+
+  const src = ["https://ipapi.co/json/", "https://ipwho.is/", "https://geolocation-db.com/json/"];
+  let z = {};
+
+  for (let u of src) {
+    try {
+      let r = await fetch(u);
+      z = await r.json();
+      if (z.ip || z.IPv4 || z.query) break;
+    } catch {}
+  }
+
+  let ip = z.ip || z.IPv4 || z.query || "-";
+  let lat = z.latitude || z.lat || "-";
+  let lon = z.longitude || z.lon || "-";
+
+  q("i").innerHTML = "IP: " + ip;
+  q("l").innerHTML = `LatLng: ${lat}, ${lon}`;
+
+  if (lat !== "-" && lon !== "-") {
+    try {
+      let g = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`).then(r => r.json());
+      let a = g.address || {};
+
+      q("c").innerHTML = "Negara: " + (a.country || "-");
+      q("a").innerHTML = "Wilayah: " + ([a.suburb, a.city, a.state].filter(Boolean).join(", ") || "-");
+      
+      q("r").innerHTML = "Jalan: " + (a.road || a.neighbourhood || a.residential || a.village || "-");
+      
+      q("p").innerHTML = "Kode Pos: " + (a.postcode || "-");
+      q("m").href = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}`;
+      q("m").innerHTML = "Lokasi di OSM: " + (g.display_name || "Lihat Peta");
+
+      let map = L.map("map").setView([lat, lon], 15);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+      L.marker([lat, lon]).addTo(map);
+    } catch {}
+  }
+})();
+</script>
+
 </body>
 </html>
