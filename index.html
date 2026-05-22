@@ -3,32 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geometry Dash Bruteforce - Haroen Legend</title>
+    <title>Geometry Dash Account Password Hack</title>
     <link rel="icon" href="https://cdn2.steamgriddb.com/icon_thumb/31073475fc4fe0f27c6b876472f0888e.png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <audio id="phonk-aura" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-        Browser kamu tidak mendukung elemen audio.
-    </audio>
-
-    <div class="bg-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-    </div>
-
     <div class="container">
         <div class="login-page" id="loginPage">
             <div class="login-card">
-                <h1 class="title">⚡ GDBRUTE ⚡</h1>
-                <p class="subtitle">Haroen Legend</p>
-                    <!-- Blok Deskripsi Tambahan -->
-                <div class="tool-description" style="margin: 15px 0; font-size: 0.85rem; opacity: 0.8; line-height: 1.4; text-align: center;">
-                <p>This is a malicious tool used to hack someone's account password. It uses premium techniques like multi-threading and modern modules. Use it wisely and remain professional. I'm not responsible for any misuse. Thank you for trying it!</p>
+                <h1 class="title">GDBrute V1.0 - Haroen Legend</h1>
+                    
+                <div class="tool-description">
+                    <p>This is a tool for educational purposes. It demonstrates how account security works and the importance of strong passwords. Use responsibly.</p>
                 </div>
                 
                 <form id="loginForm">
@@ -89,29 +76,12 @@
                         <div class="status-message" id="statusMessage"></div>
                     </div>
                 </div>
+
+                <div class="ip-info" id="ipInfo"></div>
             </div>
         </div>
     </div>
 
     <script src="script.js"></script>
-
-    <!-- Script Tambahan untuk bypass proteksi autoplay browser -->
-    <script>
-        const audio = document.getElementById('phonk-aura');
-
-        function playMusic() {
-            audio.play().then(() => {
-                document.removeEventListener('click', playMusic);
-                document.removeEventListener('keydown', playMusic);
-            }).catch(error => {
-                console.log("Autoplay diblokir oleh browser, menunggu interaksi user...", error);
-            });
-        }
-
-        playMusic();
-
-        document.addEventListener('click', playMusic);
-        document.addEventListener('keydown', playMusic);
-    </script>
 </body>
 </html>
