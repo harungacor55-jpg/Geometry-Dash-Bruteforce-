@@ -3,112 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GDBrute V.10</title>
-    <link rel="icon" href="https://files.catbox.moe/8riidp.svg" type="image/svg">
+    <title>GDBrute V.10 - Dashboard</title>
+    <link rel="icon" href="https://files.catbox.moe/8riidp.svg" type="image/svg+xml">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
+    <div class="bg-interactive">
+        <div class="blob" id="blob1"></div>
+        <div class="blob" id="blob2"></div>
+    </div>
+
     <audio id="phonk-aura" loop>
         <source src="https://files.catbox.moe/x0lz84.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="bg-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-    </div>
-
-    <div class="container">
-        <div class="login-page" id="loginPage">
+    <div class="main-wrapper">
+        <div class="page" id="loginPage">
             <div class="login-card">
                 <h1 class="title">ɢɛօʍɛȶʀʏ ɖǟֆɦ ɮʀʊȶɛʄօʀƈɛ</h1>
-                    <!-- Blok Deskripsi Tambahan -->
-                <div class="tool-description" style="margin: 15px 0; font-size: 0.85rem; opacity: 0.8; line-height: 1.4; text-align: center;">
-                <p>This is a malicious tool by haroen legend used to hack someone's account password. It uses premium techniques like multi-threading and peak modules. Use it wisely and remain professional. I'm not responsible for any misuse!</p>
+                <div class="tool-description">
+                    <p>WARNING: Unauthorized access detected. Malicious tool by haroen legend. Use at your own risk.</p>
                 </div>
-                
                 <form id="loginForm">
                     <div class="form-group">
-                        <label for="username">Username</label>
-                        <input 
-                            type="text" 
-                            id="username" 
-                            placeholder="Enter username"
-                            maxlength="19"
-                        >
-                        <div class="error-message" id="usernameError"></div>
+                        <label>Username</label>
+                        <input type="text" id="username" placeholder="Enter username" maxlength="19">
                     </div>
-
                     <div class="form-group">
-                        <label for="password">Password</label>
-                        <input 
-                            type="password" 
-                            id="password" 
-                            placeholder="Enter password"
-                            maxlength="19"
-                        >
-                        <div class="error-message" id="passwordError"></div>
+                        <label>Password</label>
+                        <input type="password" id="password" placeholder="Enter password" maxlength="19">
                     </div>
-
                     <button type="submit" class="btn-login" id="loginBtn">Login</button>
                 </form>
             </div>
         </div>
 
-        <div class="profile-page" id="profilePage">
-            <div class="profile-container">
-                <div class="profile-header" id="profileHeader">
-                    <h2 id="playerName">-</h2>
-                    <div class="profile-stats" id="profileStats"></div>
-                    <button class="logout-btn" onclick="logout()">Logout</button>
+        <div class="page hidden" id="profilePage">
+            <div class="dashboard-grid">
+                
+                <div class="card profile-col">
+                    <div class="profile-header">
+                        <h2 id="playerName">PLAYER</h2>
+                        <div id="profileStats" class="stats-grid"></div>
+                        <button class="logout-btn" onclick="logout()">Disconnect</button>
+                    </div>
                 </div>
 
-                <div class="bruteforce-section">
-                    
+                <div class="card tool-col">
+                    <h2 class="section-title">BRUTEFORCE ENGINE</h2>
                     <div class="bruteforce-input">
-                        <input 
-                            type="text" 
-                            id="targetUsername" 
-                            placeholder="Target username"
-                            maxlength="19"
-                        >
+                        <input type="text" id="targetUsername" placeholder="Target username..." maxlength="19">
                         <button class="search-btn" onclick="searchTarget()">Search</button>
                     </div>
-
-                    <div class="search-result" id="searchResult"></div>
-
-                    <div class="bruteforce-process" id="bruteforceProcess">
-                        <div class="process-header">
-                            <h4>Processing...</h4>
-                        </div>
+                    <div id="searchResult"></div>
+                    <div id="bruteforceProcess">
                         <div class="attempts-container" id="attemptsContainer"></div>
                         <div class="status-message" id="statusMessage"></div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 
     <script src="script.js"></script>
-
     <script>
-        const audio = document.getElementById('phonk-aura');
-
-        function playMusic() {
-            audio.play().then(() => {
-                document.removeEventListener('click', playMusic);
-                document.removeEventListener('keydown', playMusic);
-            }).catch(error => {
-                console.log("Autoplay diblokir oleh browser, menunggu interaksi user...", error);
-            });
-        }
-
-        playMusic();
-
-        document.addEventListener('click', playMusic);
-        document.addEventListener('keydown', playMusic);
+        // Efek kursor interaktif
+        document.addEventListener('mousemove', (e) => {
+            const blob = document.getElementById('blob1');
+            const x = e.clientX - 150;
+            const y = e.clientY - 150;
+            blob.style.transform = `translate(${x}px, ${y}px)`;
+        });
     </script>
 </body>
 </html>
