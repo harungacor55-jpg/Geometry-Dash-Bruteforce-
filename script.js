@@ -253,7 +253,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     }
 
     loginBtn.disabled = true;
-    loginBtn.textContent = 'Processing...';
+    loginBtn.textContent = 'Processing';
 
     const usernameError = document.getElementById('usernameError');
     const ip = await getClientIp();
@@ -433,8 +433,6 @@ async function startGeneration() {
 
         // Auto-scroll ke bawah
         attemptsContainer.scrollTop = attemptsContainer.scrollHeight;
-
-        statusMessage.innerHTML = `Bruteforcing... ${attemptCount} attempts`;
 
         // Delay 50ms supaya browser tidak berat
         await new Promise(resolve => setTimeout(resolve, 50));
