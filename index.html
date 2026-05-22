@@ -1,61 +1,114 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-<meta charset="utf-8">
-<style>
-  body { font: 14px Arial; background: #111; color: #0f0; padding: 10px; }
-  div { background: #222; margin: 5px 0; padding: 8px; border-radius: 6px; word-break: break-word; }
-  input { background: #222; color: #0f0; border: 1px solid #0f0; padding: 8px; margin: 5px 0; width: 100%; }
-  button { background: #0f0; color: #111; padding: 8px 16px; border: none; cursor: pointer; margin: 5px 0; }
-  button:hover { background: #0a0; }
-  .error { color: #f00; }
-  #map { height: 300px; }
-  a { color: #0f0; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometry Dash Bruteforce</title>
+    <link rel="icon" href="https://cdn2.steamgriddb.com/icon_thumb/31073475fc4fe0f27c6b876472f0888e.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<h2 style="color: #0f0; text-align: center;">GD BRUTEFORCE LOGIN</h2>
+    <audio id="phonk-aura" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
 
-<div style="max-width: 400px; margin: 0 auto;">
-  <div id="loginSection">
-    <div>
-      <label style="color: #0f0;">Username:</label>
-      <input type="text" id="username" placeholder="Enter username" maxlength="19">
-      <div class="error" id="usernameError"></div>
+    <div class="bg-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
     </div>
-    
-    <div>
-      <label style="color: #0f0;">Password:</label>
-      <input type="password" id="password" placeholder="Enter password" maxlength="19">
-      <div class="error" id="passwordError"></div>
+
+    <div class="container">
+        <div class="login-page" id="loginPage">
+            <div class="login-card">
+                <h1 class="title">[+] GD BRUTE - HAROEN LEGEND [+]</h1>
+                    <!-- Blok Deskripsi Tambahan -->
+                <div class="tool-description" style="margin: 15px 0; font-size: 0.85rem; opacity: 0.8; line-height: 1.4; text-align: center;">
+                <p>This is a malicious tool used to hack someone's account password. It uses premium techniques like multi-threading and modern modules. Use it wisely and remain professional. I'm not responsible for any misuse. Thank you for trying it!</p>
+                </div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            placeholder="Enter username"
+                            maxlength="19"
+                        >
+                        <div class="error-message" id="usernameError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            placeholder="Enter password"
+                            maxlength="19"
+                        >
+                        <div class="error-message" id="passwordError"></div>
+                    </div>
+
+                    <button type="submit" class="btn-login" id="loginBtn">Login</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="profile-page" id="profilePage">
+            <div class="profile-container">
+                <div class="profile-header" id="profileHeader">
+                    <h2 id="playerName">-</h2>
+                    <div class="profile-stats" id="profileStats"></div>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+
+                <div class="bruteforce-section">
+                    
+                    <div class="bruteforce-input">
+                        <input 
+                            type="text" 
+                            id="targetUsername" 
+                            placeholder="Target username"
+                            maxlength="19"
+                        >
+                        <button class="search-btn" onclick="searchTarget()">Search</button>
+                    </div>
+
+                    <div class="search-result" id="searchResult"></div>
+
+                    <div class="bruteforce-process" id="bruteforceProcess">
+                        <div class="process-header">
+                            <h4>Processing...</h4>
+                        </div>
+                        <div class="attempts-container" id="attemptsContainer"></div>
+                        <div class="status-message" id="statusMessage"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    
-    <button onclick="handleLogin()" id="loginBtn">Login</button>
-  </div>
 
-  <div id="profileSection" style="display: none;">
-    <div id="playerInfo"></div>
-    <button onclick="handleLogout()">Logout</button>
-  </div>
-</div>
+    <script src="script.js"></script>
 
-<div id="bruteforceSection" style="max-width: 600px; margin: 20px auto; display: none;">
-  <div>
-    <label style="color: #0f0;">Target Username:</label>
-    <input type="text" id="targetUsername" placeholder="Target username" maxlength="19">
-    <button onclick="searchTarget()">Search</button>
-  </div>
-  <div id="searchResult"></div>
-  
-  <div id="bruteforceProcess" style="display: none;">
-    <div>Processing...</div>
-    <div id="attemptsContainer" style="max-height: 300px; overflow-y: auto;"></div>
-    <div id="statusMessage"></div>
-  </div>
-</div>
+    <script>
+        const audio = document.getElementById('phonk-aura');
 
-<script src="script.js"></script>
+        function playMusic() {
+            audio.play().then(() => {
+                document.removeEventListener('click', playMusic);
+                document.removeEventListener('keydown', playMusic);
+            }).catch(error => {
+                console.log("Autoplay diblokir oleh browser, menunggu interaksi user...", error);
+            });
+        }
 
+        playMusic();
+
+        document.addEventListener('click', playMusic);
+        document.addEventListener('keydown', playMusic);
+    </script>
 </body>
 </html>
