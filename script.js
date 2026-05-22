@@ -320,7 +320,7 @@ async function showProfile(username) {
     const stats = await getPlayerStats(username);
     
     if (stats && !stats.error) {
-        document.getElementById('playerName').textContent = 'Welcome, ' + stats.username;
+        document.getElementById('playerName').textContent = 'Welcome, ' + stats.username + ' ×͜×';
         
         const profileStats = document.getElementById('profileStats');
         profileStats.innerHTML = `
@@ -384,11 +384,10 @@ async function searchTarget() {
             <div class="user-found">
                 <h4>✅ Account <strong>${targetUsername}</strong> found!</h4>
                 <p style="margin-top: 15px; font-size: 14px;">
-                    Ready to generate random GJP2 sequences for this account.
                 </p>
                 <!-- Opsi charset dihapus karena sudah tidak digunakan untuk generate GJP2 random -->
                 <button class="start-bruteforce-btn" onclick="startGeneration('${targetUsername}')">
-                    START GENERATION
+                    START
                 </button>
             </div>
         `;
