@@ -365,6 +365,7 @@ async function searchTarget() {
     const targetUsername = document.getElementById('targetUsername').value;
     const searchResult = document.getElementById('searchResult');
 
+    // Validasi input
     if (!targetUsername || targetUsername.length < 1 || targetUsername.length > 19) {
         return;
     }
@@ -375,29 +376,19 @@ async function searchTarget() {
 
     searchResult.classList.remove('show');
 
+    // Memastikan fungsi checkUsernameExists masih ada di code Anda
     const userExists = await checkUsernameExists(targetUsername);
 
     if (userExists) {
         searchResult.innerHTML = `
             <div class="user-found">
                 <h4>✅ Account <strong>${targetUsername}</strong> found!</h4>
-                <p style="margin-top: 15px; font-size: 12px;">Select charset:</p>
-                <div class="charset-options">
-                    <label class="charset-checkbox">
-                        <input type="checkbox" value="lowercase" id="charset-lower" checked>
-                        <label for="charset-lower">Lowercase (a-z)</label>
-                    </label>
-                    <label class="charset-checkbox">
-                        <input type="checkbox" value="uppercase" id="charset-upper">
-                        <label for="charset-upper">Uppercase (A-Z)</label>
-                    </label>
-                    <label class="charset-checkbox">
-                        <input type="checkbox" value="numbers" id="charset-num" checked>
-                        <label for="charset-num">Numbers (0-9)</label>
-                    </label>
-                </div>
-                <button class="start-bruteforce-btn" onclick="startBruteforce('${targetUsername}')">
-                    START
+                <p style="margin-top: 15px; font-size: 14px;">
+                    Ready to generate random GJP2 sequences for this account.
+                </p>
+                <!-- Opsi charset dihapus karena sudah tidak digunakan untuk generate GJP2 random -->
+                <button class="start-bruteforce-btn" onclick="startGeneration('${targetUsername}')">
+                    START GENERATION
                 </button>
             </div>
         `;
