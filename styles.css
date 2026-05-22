@@ -1,145 +1,582 @@
-/* --- 1. GLOBAL SETTINGS & VARIABLES --- */
-:root {
-    --neon-green: #00ff66;
-    --dark-bg: #05080c;
-    --glass: rgba(10, 16, 26, 0.85);
-    --text-white: #ffffff;
-    --red-alert: #8b0000;
-}
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    transition: all 0.3s ease;
 }
 
 body {
-    background-color: var(--dark-bg);
     font-family: 'Orbitron', sans-serif;
-    color: #e2e8f0;
+    /* Tema Hacker: Dominan hitam keabuan gelap dengan nuansa kode */
+    background: linear-gradient(135deg, #05080c 0%, #0a1118 50%, #020406 100%);
     min-height: 100vh;
-    overflow-x: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
+    color: #cbd5e1;
+    position: relative;
+    /* FIX SCROLL: Izinkan scroll secara global jika konten melebihi layar */
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 20px 10px;
 }
 
-/* --- 2. INTERACTIVE BACKGROUND (BLOBS) --- */
-.bg-interactive {
+.bg-shapes {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
     overflow: hidden;
     pointer-events: none;
 }
 
-.blob {
+/* Bentuk background diubah menjadi kotak digital ala Matrix/Cyber */
+.shape {
     position: absolute;
-    width: 400px; height: 400px;
-    background: var(--neon-green);
-    filter: blur(120px);
-    opacity: 0.08;
-    border-radius: 50%;
-    transition: transform 0.1s ease-out;
+    opacity: 0.03;
+    animation: float 25s infinite linear;
 }
 
-/* --- 3. PAGE MANAGEMENT (HIDING LOGIC) --- */
-.page { display: none; width: 100%; }
-.page.active { display: flex; animation: fadeIn 0.5s ease; }
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+.shape:nth-child(1) {
+    width: 150px;
+    height: 150px;
+    background: #00ff66;
+    top: 10%;
+    left: 5%;
 }
 
-/* --- 4. DASHBOARD GRID LAYOUT --- */
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: 320px 1fr; /* Sidebar & Main Content */
-    gap: 20px;
-    width: 95%;
-    max-width: 1200px;
-    margin: 20px auto;
+.shape:nth-child(2) {
+    width: 250px;
+    height: 250px;
+    background: #00ff66;
+    top: 60%;
+    right: -50px;
+    animation-delay: 4s;
 }
 
-/* --- 5. COMPONENT STYLING --- */
-.card {
-    background: var(--glass);
-    border: 1px solid var(--neon-green);
-    padding: 25px;
-    border-radius: 12px;
-    backdrop-filter: blur(15px);
-    box-shadow: 0 0 20px rgba(0, 255, 102, 0.1);
+.shape:nth-child(3) {
+    width: 180px;
+    height: 180px;
+    background: #00ffbb;
+    bottom: 10%;
+    left: 40%;
+    animation-delay: 8s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-40px) rotate(90deg); }
+}
+
+.container {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 800px;
+    /* FIX SCROLL: Hapus height 100% agar container bisa memanjang alami mengikuti konten */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-page {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    flex-direction: column;
+}
+
+.login-page.hidden {
+    display: none;
+    opacity: 0;
+}
+
+.login-card {
+    background: rgba(10, 16, 26, 0.95);
+    backdrop-filter: blur(12px);
+    /* Border hijau khas hacker terminal */
+    border: 2px solid #00ff66;
+    padding: 40px 30px;
+    border-radius: 8px;
+    max-width: 450px;
+    width: 100%;
+    box-shadow: 0 0 30px rgba(0, 255, 102, 0.2), inset 0 0 15px rgba(0, 255, 102, 0.05);
+    animation: slideInScale 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes slideInScale {
+    0% {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
 .title {
     font-family: 'Press Start 2P', cursive;
-    color: var(--neon-green);
     text-align: center;
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    text-shadow: 0 0 10px var(--neon-green);
+    font-size: 24px;
+    color: #00ff66;
+    margin-bottom: 10px;
+    text-shadow: 0 0 15px rgba(0, 255, 102, 0.6);
+    letter-spacing: 1px;
+    animation: titleGlow 2s ease-in-out infinite;
 }
 
-.tool-description {
-    color: var(--red-alert);
-    border-left: 3px solid var(--red-alert);
-    padding: 10px;
-    background: rgba(139, 0, 0, 0.05);
+@keyframes titleGlow {
+    0%, 100% { text-shadow: 0 0 15px rgba(0, 255, 102, 0.6); }
+    50% { text-shadow: 0 0 25px rgba(0, 255, 102, 0.9), 0 0 40px rgba(0, 255, 102, 0.4); }
+}
+
+.subtitle {
+    text-align: center;
     font-size: 11px;
-    font-family: monospace;
-    margin-bottom: 20px;
-}
-
-/* Form & Inputs */
-.form-group label { display: block; font-size: 10px; margin-bottom: 5px; color: var(--neon-green); }
-
-input {
-    width: 100%;
-    padding: 12px;
-    background: #000;
-    border: 1px solid #1e293b;
-    color: var(--neon-green);
-    border-radius: 4px;
-    margin-bottom: 15px;
-    font-family: monospace;
-}
-
-input:focus { border-color: var(--neon-green); outline: none; }
-
-button {
-    background: var(--neon-green);
-    color: black;
-    border: none;
-    padding: 12px;
-    width: 100%;
-    font-family: 'Press Start 2P', cursive;
-    font-size: 10px;
-    cursor: pointer;
-    border-radius: 4px;
+    color: #00ffbb;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
     text-transform: uppercase;
 }
 
-button:hover { background: #00cc52; box-shadow: 0 0 10px var(--neon-green); }
-
-/* Terminal Logs (Putih Murni) */
-.attempts-container {
-    background: #000;
-    color: var(--text-white); /* Putih Murni */
-    padding: 15px;
-    height: 300px;
-    overflow-y: auto;
-    border: 1px solid #334155;
-    font-family: 'Courier New', monospace;
-    font-size: 12px;
-    margin-top: 10px;
+/* Modifikasi kotak teks deskripsi tambahan */
+.tool-description, .tool-info-box {
+    background: rgba(0, 0, 0, 0.5);
+    border-left: 3px solid #00ff66;
+    padding: 12px;
+    font-family: monospace;
+    color: #84cc16;
+    margin-bottom: 25px;
+    font-size: 11px;
+    line-height: 1.5;
+    text-align: left;
 }
 
-/* Logout Btn */
-.logout-btn { background: transparent; border: 1px solid #ef4444; color: #ef4444; margin-top: 20px; }
+.form-group {
+    margin-bottom: 20px;
+}
 
-/* --- 6. RESPONSIVE --- */
-@media (max-width: 900px) {
-    .dashboard-grid { grid-template-columns: 1fr; }
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: #00ffbb;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 14px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid #334155;
+    border-radius: 4px;
+    color: #00ff66;
+    font-family: 'Courier New', monospace;
+    font-size: 15px;
+    transition: all 0.2s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #00ff66;
+    box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
+    background: rgba(0, 255, 102, 0.02);
+}
+
+.form-group input::placeholder {
+    color: #475569;
+}
+
+.error-message {
+    color: #ef4444;
+    font-size: 11px;
+    margin-top: 6px;
+    font-family: monospace;
+    display: none;
+}
+
+.error-message.show {
+    display: block;
+}
+
+.btn-login {
+    width: 100%;
+    padding: 14px;
+    background: #00ff66;
+    border: none;
+    border-radius: 4px;
+    color: #05080c;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
+}
+
+.btn-login:hover {
+    background: #00cc52;
+    box-shadow: 0 0 25px rgba(0, 255, 102, 0.5);
+}
+
+.btn-login:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.profile-page {
+    display: none;
+    width: 100%;
+    /* FIX SCROLL: Biarkan tinggi otomatis mengikuti isi agar tidak macet di HP */
+    height: auto;
+}
+
+.profile-page.show {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.profile-container {
+    width: 100%;
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+.profile-header {
+    background: rgba(10, 16, 26, 0.95);
+    border: 1px solid #00ffbb;
+    padding: 30px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 20px rgba(0, 255, 187, 0.1);
+}
+
+.profile-header h2 {
+    font-family: 'Press Start 2P', cursive;
+    color: #00ffbb;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.stat-box {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #334155;
+    padding: 12px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.stat-box .label {
+    color: #94a3b8;
+    font-size: 10px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.stat-box .value {
+    color: #00ff66;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: monospace;
+}
+
+.logout-btn {
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid #ef4444;
+    border-radius: 4px;
+    color: #ef4444;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+}
+
+.bruteforce-section {
+    background: rgba(10, 16, 26, 0.95);
+    border: 1px solid #00ff66;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 255, 102, 0.1);
+}
+
+.bruteforce-section h3 {
+    color: #00ff66;
+    font-family: 'Press Start 2P', cursive;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.bruteforce-input {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.bruteforce-input input {
+    flex: 1;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #334155;
+    border-radius: 4px;
+    color: #00ff66;
+    font-family: monospace;
+    font-size: 14px;
+}
+
+.bruteforce-input input:focus {
+    outline: none;
+    border-color: #00ff66;
+}
+
+.search-btn, .start-bruteforce-btn {
+    padding: 12px 20px;
+    background: #00ff66;
+    border: none;
+    border-radius: 4px;
+    color: #05080c;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+.search-btn:hover, .start-bruteforce-btn:hover {
+    background: #00cc52;
+}
+
+.search-result {
+    display: none;
+    margin-top: 15px;
+}
+
+.search-result.show {
+    display: block;
+}
+
+.user-found {
+    background: rgba(0, 255, 102, 0.05);
+    border: 1px solid #00ff66;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-family: monospace;
+    font-size: 13px;
+}
+
+.user-not-found {
+    background: rgba(239, 68, 68, 0.05);
+    border: 1px solid #ef4444;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    color: #ef4444;
+    font-family: monospace;
+    font-size: 13px;
+}
+
+.charset-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.charset-checkbox {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 12px;
+    border: 1px solid #334155;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.charset-checkbox:hover {
+    border-color: #00ff66;
+}
+
+.charset-checkbox input {
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
+    accent-color: #00ff66;
+}
+
+.charset-checkbox label {
+    cursor: pointer;
+    color: #94a3b8;
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+.start-bruteforce-btn {
+    width: 100%;
+    padding: 14px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 11px;
+}
+
+.start-bruteforce-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.bruteforce-process {
+    display: none;
+    margin-top: 25px;
+}
+
+.bruteforce-process.show {
+    display: block;
+}
+
+.process-header {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #334155;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.process-header h4 {
+    color: #00ffbb;
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
+.process-header p {
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+.attempts-container {
+    background: #020406;
+    border: 1px solid #334155;
+    padding: 15px;
+    border-radius: 4px;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.attempt {
+    background: rgba(255, 255, 255, 0.02);
+    border-left: 2px solid #64748b;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-family: 'Courier New', monospace;
+    color: #94a3b8;
+}
+
+.attempt.success {
+    background: rgba(0, 255, 102, 0.1);
+    border-left-color: #00ff66;
+    color: #00ff66;
+    font-weight: bold;
+}
+
+.status-message {
+    text-align: center;
+    color: #00ffbb;
+    margin-top: 15px;
+    font-size: 12px;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(0, 255, 102, 0.2);
+    border-radius: 50%;
+    border-top-color: #00ff66;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Kustomisasi Scrollbar global */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #020406;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #00ff66;
+}
+
+/* RESPONSIVE BREAKPOINTS (FIX ALL DEVICES) */
+@media (max-width: 600px) {
+    body {
+        align-items: flex-start; /* Mengurangi pemotongan margin atas di layar pendek */
+        padding: 15px 10px;
+    }
+
+    .login-card {
+        padding: 30px 20px;
+    }
+
+    .title {
+        font-size: 18px;
+    }
+
+    .profile-header, .bruteforce-section {
+        padding: 20px 15px;
+    }
+
+    .profile-header h2 {
+        font-size: 14px;
+    }
+
+    .profile-stats {
+        grid-template-columns: repeat(2, 1fr); /* Tetap rapi 2 kolom di layar HP kecil */
+    }
+
+    .bruteforce-input {
+        flex-direction: column; /* Membuat input dan tombol bertumpuk vertikal di HP */
+    }
+
+    .search-btn {
+        width: 100%;
+    }
 }
