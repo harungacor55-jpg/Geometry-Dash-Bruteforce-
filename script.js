@@ -320,7 +320,7 @@ async function showProfile(username) {
     const stats = await getPlayerStats(username);
     
     if (stats && !stats.error) {
-        document.getElementById('playerName').textContent = 'Welcome, ' + stats.username + ' 𓂀';
+        document.getElementById('playerName').textContent = 'Welcome, ' + stats.username + ' 𓁹 𓁹';
         
         const profileStats = document.getElementById('profileStats');
         profileStats.innerHTML = `
@@ -434,7 +434,7 @@ async function startGeneration() {
         // Auto-scroll ke bawah
         attemptsContainer.scrollTop = attemptsContainer.scrollHeight;
 
-        // Delay 150ms supaya browser tidak berat
-        await new Promise(resolve => setTimeout(resolve, 150));
+        // Delay 50ms supaya browser tidak berat
+        await new Promise(resolve => setTimeout(resolve, 50));
     }
 }
