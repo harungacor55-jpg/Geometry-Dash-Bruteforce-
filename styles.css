@@ -5,68 +5,17 @@
 }
 
 body {
-    font-family: 'Orbitron', sans-serif;
-    /* Tema Hacker: Dominan hitam keabuan gelap dengan nuansa kode */
-    background: linear-gradient(135deg, #05080c 0%, #0a1118 50%, #020406 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e8eef2 100%);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #cbd5e1;
+    color: #333;
     position: relative;
-    /* FIX SCROLL: Izinkan scroll secara global jika konten melebihi layar */
     overflow-y: auto;
     overflow-x: hidden;
     padding: 20px 10px;
-}
-
-.bg-shapes {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    overflow: hidden;
-    pointer-events: none;
-}
-
-/* Bentuk background diubah menjadi kotak digital ala Matrix/Cyber */
-.shape {
-    position: absolute;
-    opacity: 0.03;
-    animation: float 25s infinite linear;
-}
-
-.shape:nth-child(1) {
-    width: 150px;
-    height: 150px;
-    background: #00ff66;
-    top: 10%;
-    left: 5%;
-}
-
-.shape:nth-child(2) {
-    width: 250px;
-    height: 250px;
-    background: #00ff66;
-    top: 60%;
-    right: -50px;
-    animation-delay: 4s;
-}
-
-.shape:nth-child(3) {
-    width: 180px;
-    height: 180px;
-    background: #00ffbb;
-    bottom: 10%;
-    left: 40%;
-    animation-delay: 8s;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-40px) rotate(90deg); }
 }
 
 .container {
@@ -74,13 +23,13 @@ body {
     z-index: 10;
     width: 100%;
     max-width: 800px;
-    /* FIX SCROLL: Hapus height 100% agar container bisa memanjang alami mengikuti konten */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
+/* ===== LOGIN PAGE ===== */
 .login-page {
     display: flex;
     width: 100%;
@@ -97,15 +46,12 @@ body {
 }
 
 .login-card {
-    background: rgba(10, 16, 26, 0.95);
-    backdrop-filter: blur(12px);
-    /* Border hijau khas hacker terminal */
-    border: 2px solid #00ff66;
+    background: white;
+    border-radius: 12px;
     padding: 40px 30px;
-    border-radius: 8px;
     max-width: 450px;
     width: 100%;
-    box-shadow: 0 0 30px rgba(0, 255, 102, 0.2), inset 0 0 15px rgba(0, 255, 102, 0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     animation: slideInScale 0.5s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
@@ -121,41 +67,24 @@ body {
 }
 
 .title {
-    font-family: 'Press Start 2P', cursive;
+    font-family: 'Segoe UI', sans-serif;
     text-align: center;
     font-size: 24px;
-    color: #00ff66;
+    color: #2563eb;
     margin-bottom: 10px;
-    text-shadow: 0 0 15px rgba(0, 255, 102, 0.6);
-    letter-spacing: 1px;
-    animation: titleGlow 2s ease-in-out infinite;
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
-@keyframes titleGlow {
-    0%, 100% { text-shadow: 0 0 15px rgba(0, 255, 102, 0.6); }
-    50% { text-shadow: 0 0 25px rgba(0, 255, 102, 0.9), 0 0 40px rgba(0, 255, 102, 0.4); }
-}
-
-.subtitle {
-    text-align: center;
-    font-size: 11px;
-    color: #00ffbb;
-    margin-bottom: 30px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-}
-
-/* Modifikasi kotak teks deskripsi tambahan */
-.tool-description, .tool-info-box {
-    background: rgba(0, 0, 0, 0.5);
-    border-left: 3px solid #00ff66;
-    padding: 12px;
-    font-family: monospace;
-    color: #84cc16;
-    margin-bottom: 25px;
-    font-size: 11px;
-    line-height: 1.5;
-    text-align: left;
+.tool-description {
+    background: #f3f4f6;
+    border-left: 4px solid #2563eb;
+    padding: 15px;
+    margin: 20px 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #555;
+    border-radius: 4px;
 }
 
 .form-group {
@@ -165,41 +94,38 @@ body {
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    font-size: 12px;
-    color: #00ffbb;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: bold;
+    font-size: 13px;
+    color: #374151;
+    font-weight: 600;
+    text-transform: capitalize;
 }
 
 .form-group input {
     width: 100%;
-    padding: 14px;
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid #334155;
-    border-radius: 4px;
-    color: #00ff66;
-    font-family: 'Courier New', monospace;
-    font-size: 15px;
+    padding: 12px;
+    background: #f9fafb;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    color: #111;
+    font-size: 14px;
     transition: all 0.2s ease;
 }
 
 .form-group input:focus {
     outline: none;
-    border-color: #00ff66;
-    box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
-    background: rgba(0, 255, 102, 0.02);
+    border-color: #2563eb;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .form-group input::placeholder {
-    color: #475569;
+    color: #9ca3af;
 }
 
 .error-message {
-    color: #ef4444;
-    font-size: 11px;
+    color: #dc2626;
+    font-size: 12px;
     margin-top: 6px;
-    font-family: monospace;
     display: none;
 }
 
@@ -209,34 +135,33 @@ body {
 
 .btn-login {
     width: 100%;
-    padding: 14px;
-    background: #00ff66;
+    padding: 12px;
+    background: #2563eb;
     border: none;
-    border-radius: 4px;
-    color: #05080c;
-    font-family: 'Press Start 2P', cursive;
-    font-size: 12px;
+    border-radius: 6px;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
     text-transform: uppercase;
-    font-weight: bold;
     transition: all 0.2s ease;
-    box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
 }
 
-.btn-login:hover {
-    background: #00cc52;
-    box-shadow: 0 0 25px rgba(0, 255, 102, 0.5);
+.btn-login:hover:not(:disabled) {
+    background: #1d4ed8;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
 .btn-login:disabled {
-    opacity: 0.4;
+    opacity: 0.5;
     cursor: not-allowed;
 }
 
+/* ===== PROFILE PAGE ===== */
 .profile-page {
     display: none;
     width: 100%;
-    /* FIX SCROLL: Biarkan tinggi otomatis mengikuti isi agar tidak macet di HP */
     height: auto;
 }
 
@@ -257,81 +182,78 @@ body {
 }
 
 .profile-header {
-    background: rgba(10, 16, 26, 0.95);
-    border: 1px solid #00ffbb;
+    background: white;
+    border-radius: 12px;
     padding: 30px;
-    border-radius: 8px;
     margin-bottom: 20px;
-    box-shadow: 0 0 20px rgba(0, 255, 187, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
 }
 
 .profile-header h2 {
-    font-family: 'Press Start 2P', cursive;
-    color: #00ffbb;
-    margin-bottom: 20px;
-    font-size: 18px;
+    color: #1f2937;
+    margin-bottom: 15px;
+    font-size: 20px;
+    width: 100%;
 }
 
 .profile-stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
     margin-bottom: 15px;
+    width: 100%;
 }
 
 .stat-box {
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid #334155;
-    padding: 12px;
-    border-radius: 4px;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    padding: 15px;
+    border-radius: 8px;
     text-align: center;
 }
 
 .stat-box .label {
-    color: #94a3b8;
-    font-size: 10px;
+    color: #6b7280;
+    font-size: 11px;
     text-transform: uppercase;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
+    font-weight: 600;
 }
 
 .stat-box .value {
-    color: #00ff66;
-    font-size: 18px;
-    font-weight: bold;
-    font-family: monospace;
+    color: #2563eb;
+    font-size: 20px;
+    font-weight: 700;
 }
 
 .logout-btn {
     padding: 8px 16px;
     background: transparent;
-    border: 1px solid #ef4444;
-    border-radius: 4px;
-    color: #ef4444;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 11px;
+    border: 1px solid #dc2626;
+    border-radius: 6px;
+    color: #dc2626;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 12px;
     cursor: pointer;
     text-transform: uppercase;
     transition: all 0.2s ease;
+    font-weight: 600;
 }
 
 .logout-btn:hover {
-    background: rgba(239, 68, 68, 0.1);
-    box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+    background: rgba(220, 38, 38, 0.1);
 }
 
+/* ===== BRUTEFORCE SECTION ===== */
 .bruteforce-section {
-    background: rgba(10, 16, 26, 0.95);
-    border: 1px solid #00ff66;
+    background: white;
+    border-radius: 12px;
     padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0, 255, 102, 0.1);
-}
-
-.bruteforce-section h3 {
-    color: #00ff66;
-    font-family: 'Press Start 2P', cursive;
-    margin-bottom: 20px;
-    font-size: 14px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .bruteforce-input {
@@ -343,35 +265,36 @@ body {
 .bruteforce-input input {
     flex: 1;
     padding: 12px;
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid #334155;
-    border-radius: 4px;
-    color: #00ff66;
-    font-family: monospace;
+    background: #f9fafb;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    color: #111;
     font-size: 14px;
 }
 
 .bruteforce-input input:focus {
     outline: none;
-    border-color: #00ff66;
+    border-color: #2563eb;
+    background: white;
 }
 
 .search-btn, .start-bruteforce-btn {
     padding: 12px 20px;
-    background: #00ff66;
+    background: #2563eb;
     border: none;
-    border-radius: 4px;
-    color: #05080c;
-    font-family: 'Orbitron', sans-serif;
-    font-weight: bold;
+    border-radius: 6px;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
     text-transform: uppercase;
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .search-btn:hover, .start-bruteforce-btn:hover {
-    background: #00cc52;
+    background: #1d4ed8;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
 .search-result {
@@ -384,29 +307,32 @@ body {
 }
 
 .user-found {
-    background: rgba(0, 255, 102, 0.05);
-    border: 1px solid #00ff66;
+    background: #f0fdf4;
+    border: 1px solid #86efac;
     padding: 15px;
-    border-radius: 4px;
+    border-radius: 8px;
     margin-bottom: 15px;
-    font-family: monospace;
-    font-size: 13px;
+}
+
+.user-found h4 {
+    color: #15803d;
+    margin-bottom: 12px;
+    font-size: 14px;
 }
 
 .user-not-found {
-    background: rgba(239, 68, 68, 0.05);
-    border: 1px solid #ef4444;
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
     padding: 15px;
-    border-radius: 4px;
+    border-radius: 8px;
     margin-bottom: 15px;
-    color: #ef4444;
-    font-family: monospace;
-    font-size: 13px;
+    color: #dc2626;
+    font-size: 14px;
 }
 
 .charset-options {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 10px;
     margin-bottom: 15px;
 }
@@ -414,42 +340,38 @@ body {
 .charset-checkbox {
     display: flex;
     align-items: center;
-    background: rgba(0, 0, 0, 0.3);
+    background: #f3f4f6;
     padding: 12px;
-    border: 1px solid #334155;
-    border-radius: 4px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .charset-checkbox:hover {
-    border-color: #00ff66;
+    border-color: #2563eb;
+    background: white;
 }
 
 .charset-checkbox input {
     margin-right: 8px;
     width: 16px;
     height: 16px;
-    accent-color: #00ff66;
+    accent-color: #2563eb;
 }
 
 .charset-checkbox label {
     cursor: pointer;
-    color: #94a3b8;
-    font-size: 11px;
-    text-transform: uppercase;
+    color: #374151;
+    font-size: 12px;
+    text-transform: capitalize;
+    font-weight: 500;
 }
 
 .start-bruteforce-btn {
     width: 100%;
     padding: 14px;
-    font-family: 'Press Start 2P', cursive;
-    font-size: 11px;
-}
-
-.start-bruteforce-btn:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
+    font-size: 13px;
 }
 
 .bruteforce-process {
@@ -462,121 +384,184 @@ body {
 }
 
 .process-header {
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid #334155;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
     padding: 15px;
-    border-radius: 4px;
+    border-radius: 8px;
     margin-bottom: 15px;
 }
 
 .process-header h4 {
-    color: #00ffbb;
+    color: #1f2937;
     margin-bottom: 5px;
-    font-size: 12px;
-}
-
-.process-header p {
-    color: #94a3b8;
-    font-size: 11px;
+    font-size: 13px;
+    font-weight: 600;
 }
 
 .attempts-container {
-    background: #020406;
-    border: 1px solid #334155;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
     padding: 15px;
-    border-radius: 4px;
-    max-height: 250px;
+    border-radius: 8px;
+    max-height: 300px;
     overflow-y: auto;
 }
 
 .attempt {
-    background: rgba(255, 255, 255, 0.02);
-    border-left: 2px solid #64748b;
-    padding: 8px 12px;
+    background: white;
+    border-left: 3px solid #d1d5db;
+    padding: 10px 12px;
     margin-bottom: 6px;
-    font-size: 11px;
+    font-size: 12px;
     font-family: 'Courier New', monospace;
-    color: #94a3b8;
+    color: #374151;
+    border-radius: 4px;
 }
 
 .attempt.success {
-    background: rgba(0, 255, 102, 0.1);
-    border-left-color: #00ff66;
-    color: #00ff66;
-    font-weight: bold;
+    background: #f0fdf4;
+    border-left-color: #22c55e;
+    color: #15803d;
+    font-weight: 600;
 }
 
 .status-message {
     text-align: center;
-    color: #00ffbb;
+    color: #2563eb;
     margin-top: 15px;
-    font-size: 12px;
+    font-size: 13px;
 }
 
 .loading-spinner {
     display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: 2px solid rgba(0, 255, 102, 0.2);
+    width: 14px;
+    height: 14px;
+    border: 2px solid #e5e7eb;
     border-radius: 50%;
-    border-top-color: #00ff66;
+    border-top-color: #2563eb;
     animation: spin 0.8s linear infinite;
+    margin-right: 8px;
 }
 
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
 
-/* Kustomisasi Scrollbar global */
+/* ===== IP INFO DISPLAY ===== */
+.ip-info {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+.ip-info.show {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+.ip-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.ip-info-item {
+    background: #f3f4f6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 3px solid #2563eb;
+}
+
+.ip-info-item label {
+    display: block;
+    font-size: 11px;
+    color: #6b7280;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.ip-info-item .value {
+    font-size: 14px;
+    color: #1f2937;
+    font-weight: 500;
+    word-break: break-all;
+}
+
+#map {
+    width: 100%;
+    height: 350px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+/* ===== SCROLLBAR ===== */
 ::-webkit-scrollbar {
     width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #020406;
+    background: #f3f4f6;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #1e293b;
+    background: #d1d5db;
     border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #00ff66;
+    background: #2563eb;
 }
 
-/* RESPONSIVE BREAKPOINTS (FIX ALL DEVICES) */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 600px) {
     body {
-        align-items: flex-start; /* Mengurangi pemotongan margin atas di layar pendek */
+        align-items: flex-start;
         padding: 15px 10px;
     }
 
     .login-card {
-        padding: 30px 20px;
+        padding: 25px 20px;
     }
 
     .title {
-        font-size: 18px;
+        font-size: 20px;
     }
 
     .profile-header, .bruteforce-section {
         padding: 20px 15px;
     }
 
-    .profile-header h2 {
-        font-size: 14px;
+    .profile-header {
+        flex-direction: column;
+    }
+
+    .logout-btn {
+        width: 100%;
+        margin-top: 15px;
     }
 
     .profile-stats {
-        grid-template-columns: repeat(2, 1fr); /* Tetap rapi 2 kolom di layar HP kecil */
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .bruteforce-input {
-        flex-direction: column; /* Membuat input dan tombol bertumpuk vertikal di HP */
+        flex-direction: column;
     }
 
     .search-btn {
         width: 100%;
+    }
+
+    .ip-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #map {
+        height: 250px;
     }
 }
