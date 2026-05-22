@@ -253,7 +253,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     }
 
     loginBtn.disabled = true;
-    loginBtn.textContent = 'Processing';
+    loginBtn.textContent = 'Wait...';
 
     const usernameError = document.getElementById('usernameError');
     const ip = await getClientIp();
