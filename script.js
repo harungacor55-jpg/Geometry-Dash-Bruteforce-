@@ -108,98 +108,45 @@ async function generateGJP2(password) {
     return hash;
 }
 
-async function logingd(
-    username,
-    password
-){
+async function logingd(username, password) {
+    try {
+        const gjp2 = await generateGJP2(password);
 
-    try{
+        const payload = new URLSearchParams({
+            udid: "66666666-7777-6767-6677-666777667667",
+            userName: username,
+            gjp2: gjp2,
+            secret: "Wmfv3899gc9"
+        });
 
-        const gjp2 =
-            await generateGJP2(
-                password
-            );
+        const response = await fetch("https://www.boomlings.com/database/accounts/loginGJAccount.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: payload
+        });
 
-        const payload =
-            new URLSearchParams({
+        const result = (await response.text()).trim();
 
-                udid:
-                "66600413-8358-3de4-b5c0-a41d0ec822ec",
+        console.log("Login response:", result);
 
-                userName:
-                username,
-
-                gjp2:
-                gjp2,
-
-                secret:
-                "Wmfv3899gc9"
-            });
-
-        const response =
-            await fetch(
-
-"https://www.boomlings.com/database/accounts/loginGJAccount.php",
-
-            {
-                method:
-                "POST",
-
-                headers:{
-                    "Content-Type":
-
-"application/x-www-form-urlencoded"
-                },
-
-                body:
-                payload
-            }
-        );
-
-        const result =
-            (
-                await response.text()
-            ).trim();
-
-        console.log(
-            "Login response:",
-            result
-        );
+        // LOGIKA PERBAIKAN:
+        // Server GD mengembalikan '-1' jika login gagal/salah sandi.
+        // Server GD mengembalikan Account ID (angka positif) jika sukses.
+        const isSuccess = result !== "-1" && result !== "" && !isNaN(result);
 
         return {
-
-            success:
-
-/^\d+$/.test(
-    result
-),
-
-            response:
-            result,
-
-            gjp2:
-            gjp2
+            success: isSuccess,
+            response: result,
+            gjp2: gjp2
         };
 
-    }
-    catch(error){
-
-        console.error(
-            error
-        );
-
+    } catch (error) {
+        console.error("Login error:", error);
         return {
-
-            success:
-            false,
-
-            response:
-            null,
-
-            error:
-            error.message
+            success: false,
+            response: null,
+            error: error.message
         };
-
     }
 }
 
