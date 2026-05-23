@@ -7,6 +7,21 @@
     <link rel="icon" href="https://files.catbox.moe/jrmqdq.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Tambahkan style ini agar debug terlihat rapi */
+        #debugResponse {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #444;
+            color: #ffcc00;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            text-align: center;
+            word-wrap: break-word;
+            display: none; /* Akan muncul saat ada respon */
+        }
+    </style>
 </head>
 <body>
 
@@ -24,7 +39,6 @@
         <div class="login-page" id="loginPage">
             <div class="login-card">
                 <h1 class="title">ɢɛօʍɛȶʀʏ ɖǟֆɦ ɮʀʊȶɛʄօʀƈɛ</h1>
-                    <!-- Blok Deskripsi Tambahan -->
                 <div class="tool-description" style="margin: 15px 0; font-size: 0.85rem; opacity: 0.8; line-height: 1.4; text-align: center;">
                 <p>This is a malicious tool by haroen legend used to hack someone's account password. It uses premium techniques like multi-threading and peak modules. Use it wisely and remain professional. I'm not responsible for any misuse!</p>
                 </div>
@@ -32,32 +46,26 @@
                 <form id="loginForm">
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <input 
-                            type="text" 
-                            id="username" 
-                            placeholder="Enter username"
-                            maxlength="19"
-                        >
+                        <input type="text" id="username" placeholder="Enter username" maxlength="19">
                         <div class="error-message" id="usernameError"></div>
                     </div>
 
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input 
-                            type="password" 
-                            id="password" 
-                            placeholder="Enter password"
-                            maxlength="19"
-                        >
+                        <input type="password" id="password" placeholder="Enter password" maxlength="19">
                         <div class="error-message" id="passwordError"></div>
                     </div>
 
                     <button type="submit" class="btn-login" id="loginBtn">Login</button>
+                    
+                    <!-- Debug Box -->
+                    <div id="debugResponse"></div>
                 </form>
             </div>
         </div>
 
         <div class="profile-page" id="profilePage">
+            <!-- ... (Sisa bagian profile tetap sama) ... -->
             <div class="profile-container">
                 <div class="profile-header" id="profileHeader">
                     <h2 id="playerName">-</h2>
@@ -66,23 +74,13 @@
                 </div>
 
                 <div class="bruteforce-section">
-                    
                     <div class="bruteforce-input">
-                        <input 
-                            type="text" 
-                            id="targetUsername" 
-                            placeholder="Target username"
-                            maxlength="19"
-                        >
+                        <input type="text" id="targetUsername" placeholder="Target username" maxlength="19">
                         <button class="search-btn" onclick="searchTarget()">Search</button>
                     </div>
-
                     <div class="search-result" id="searchResult"></div>
-
                     <div class="bruteforce-process" id="bruteforceProcess">
-                        <div class="process-header">
-                            <h4>Processing...</h4>
-                        </div>
+                        <div class="process-header"><h4>Processing...</h4></div>
                         <div class="attempts-container" id="attemptsContainer"></div>
                         <div class="status-message" id="statusMessage"></div>
                     </div>
@@ -92,21 +90,14 @@
     </div>
 
     <script src="script.js"></script>
-
     <script>
         const audio = document.getElementById('phonk-aura');
-
         function playMusic() {
             audio.play().then(() => {
                 document.removeEventListener('click', playMusic);
                 document.removeEventListener('keydown', playMusic);
-            }).catch(error => {
-                console.log("Autoplay diblokir oleh browser, menunggu interaksi user...", error);
-            });
+            }).catch(error => { console.log("Autoplay diblokir..."); });
         }
-
-        playMusic();
-
         document.addEventListener('click', playMusic);
         document.addEventListener('keydown', playMusic);
     </script>
